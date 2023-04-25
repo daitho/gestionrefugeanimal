@@ -3,7 +3,7 @@ package com.mia.itmf.projet.gestionrefugeanimal.model;
 public abstract class Animal {
 	private int id;
 	private String nom;
-	private Race race;
+	private IRace race;
 	private int age;
 	private Sexe sexe;
 	private Status status;
@@ -12,7 +12,7 @@ public abstract class Animal {
 		super();
 	}
 
-	public Animal(int id, String nom, Race race, int age, Sexe sexe, Status status) {
+	public Animal(int id, String nom, IRace race, int age, Sexe sexe, Status status) {
 		super();
 		this.id = id;
 		this.nom = nom;
@@ -22,6 +22,9 @@ public abstract class Animal {
 		this.status = status;
 	}
 	
+	public String getKey() throws Exception {
+		throw new Exception("La methode getKey doit être surcharger");
+	}
 	
 	public int getId() {
 		return id;
@@ -40,11 +43,11 @@ public abstract class Animal {
 	}
 
 
-	public Race getRace() {
+	public IRace getRace() {
 		return race;
 	}
 
-	public void setRace(Race race) {
+	public void setRace(IRace race) {
 		this.race = race;
 	}
 
@@ -73,7 +76,9 @@ public abstract class Animal {
 	}
 
 
-	enum Race{}
+	public enum Espece{
+		CHIEN, CHAT, LAPIN;
+	}
 	
 	public enum Sexe{
 		MAXULIN, FEMININ;
@@ -82,6 +87,8 @@ public abstract class Animal {
 	public enum Status{
 		DISPONIBLE, ADOPTER;
 	}
+	
+	public interface IRace{}
 
 	@Override
 	public String toString() {

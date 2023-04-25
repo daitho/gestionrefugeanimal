@@ -5,22 +5,26 @@ public class Chien extends Animal {
 	
 	public Chien() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-//	public Chien(int id, String nom, Race race, int age, Sexe sexe, Status status) {
-//		super(id, nom, race, age, sexe, status);
-//	}
-//
-//	Race getRace() {
-//		return race;
-//	}
-//
-//	public void setRace(Race race) {
-//		super.setRace(race);
-//	}
-//	
-//	public enum Race{
-//	}
+	public Chien(int id, String nom, IRace race, int age, Sexe sexe, Status status) {
+		super(id, nom, race, age, sexe, status);
+	}
+	
+	public String getKey() throws Exception {
+		return "Chien-"+getId();
+	}
+
+	public RaceChien getRace() {
+		return getRace();
+	}
+
+	public void setRace(RaceChien race) {
+		this.setRace(race);
+	}
+	
+	public enum RaceChien implements IRace{
+		Boledogue, Caniche, Carlin, Cairn, Cocker, Colley, Dobermann, DogueAllemand, Eurasier, Mastiff, Pinscher, Pitbull;
+	}
 
 }
