@@ -1,25 +1,15 @@
 package com.mia.itmf.projet.gestionrefugeanimal.model;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Adoption {
 	private int id;
 	private Status status;
 	private String date;
-	private Personne personne;
-	private List<Animal> listAnimal;
+	private Adoptant adoptant;
+	private Animal animal;
 	
 	
 	public Adoption() {
 		super();
-	}
-	
-	public Adoption(int id, String date, Personne personne) {
-		super();
-		this.id = id;
-		this.date = date;
-		this.personne = personne;
 	}
 
 	public int getId() {
@@ -30,7 +20,7 @@ public class Adoption {
 		this.id = id;
 	}
 
-	public Status isStatus() {
+	public Status getStatus() {
 		return status;
 	}
 
@@ -46,19 +36,29 @@ public class Adoption {
 		this.date = date;
 	}
 
-	public Personne getPersonne() {
-		return personne;
+	public Adoptant getAdoptant() {
+		return adoptant;
 	}
 
-	public void setPersonne(Personne personne) {
-		this.personne = personne;
+	public void setAdoptant(Adoptant adoptant) {
+		this.adoptant = adoptant;
+	}
+	
+	
+	
+//	public List<Animal> getListAnimal() {
+//		if(listAnimal == null) {
+//			listAnimal = new ArrayList<Animal>();
+//		}
+//		return listAnimal;
+//	}
+
+	public Animal getAnimal() {
+		return animal;
 	}
 
-	public List<Animal> getListAnimal() {
-		if(listAnimal == null) {
-			listAnimal = new ArrayList<Animal>();
-		}
-		return listAnimal;
+	public void setAnimal(Animal animal) {
+		this.animal = animal;
 	}
 
 	public enum Status{
@@ -67,7 +67,7 @@ public class Adoption {
 
 	@Override
 	public String toString() {
-		return "Adoption [id=" + getId() + ", status=" + status + ", date=" + date + ", personne=" + personne.getNom() + "]";
+		return "Adoption [id=" + getId() + ", status=" + status + ", date=" + date + ", Nom =" + adoptant.getNom() + "]";
 	}
 	
 	
