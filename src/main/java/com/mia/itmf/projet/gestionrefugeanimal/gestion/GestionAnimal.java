@@ -1,4 +1,4 @@
-package com.mia.itmf.projet.gestionrefugeanimal;
+package com.mia.itmf.projet.gestionrefugeanimal.gestion;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -24,6 +24,14 @@ public class GestionAnimal {
 	protected boolean supprimerAnimal(Animal animal) throws Exception {
 		if(verifierAnimal(animal)) {
 			mapAnimal.remove(animal.getKey(), animal);
+			return true;
+		}
+		return false;
+	}
+	
+	protected boolean miseAJourAnimal(Animal animal) throws Exception {
+		if(verifierAnimal(animal)) {
+			mapAnimal.replace(animal.getKey(), animal);
 			return true;
 		}
 		return false;
