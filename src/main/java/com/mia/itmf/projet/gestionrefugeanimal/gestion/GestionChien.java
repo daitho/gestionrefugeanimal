@@ -1,8 +1,9 @@
 package com.mia.itmf.projet.gestionrefugeanimal.gestion;
 
 import com.mia.itmf.projet.gestionrefugeanimal.model.Chien;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Refuge;
 
-public class gestionChien extends GestionAnimal {
+public class GestionChien extends Refuge {
 	
 	public boolean verifierChien(Chien chien) {
 		return super.verifierAnimal(chien);
@@ -10,13 +11,15 @@ public class gestionChien extends GestionAnimal {
 	
 	public boolean ajouterChien(Chien chien) {
 		if(super.ajouterAnimal(chien)) {
+			System.out.println("Chien ajouté ! ");
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean suprimerChien(Chien chien) throws Exception {
+	public boolean supprimerChien(Chien chien){
 		if(super.supprimerAnimal(chien)) {
+			System.out.println("Chien supprimé ! ");
 			return true;
 		}
 		return false;
@@ -32,5 +35,13 @@ public class gestionChien extends GestionAnimal {
 	
 	public String getKey(int key) {
 		return "Chien-"+key;
+	}
+	
+	public int getNombreChien() {
+		return super.getNombreAnimal("Chien");
+	}
+	
+	public void afficherListeChien() {
+		super.afficherListeAnimal("Chien");
 	}
 }

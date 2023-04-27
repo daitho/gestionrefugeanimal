@@ -1,22 +1,26 @@
 package com.mia.itmf.projet.gestionrefugeanimal.model;
 
 public class Chien extends Animal {
+	private static int COUNT = 1;
+	private final String key;
 	
 	
 	public Chien() {
 		super();
+		this.key = "Chien-"+ COUNT++;
 	}
 
-	public Chien(int id, String nom, IRace race, int age, Sexe sexe, Status status) {
-		super(id, nom, race, age, sexe, status);
+	public Chien(String nom, IRace race, int age, Sexe sexe) {
+		super(nom, race, age, sexe);
+		this.key = "Chien-"+ COUNT++;
 	}
 	
-	public String getKey() throws Exception {
-		return "Chien-"+getId();
+	public String getKey(){
+		return this.key;
 	}
 
 	public RaceChien getRace() {
-		return getRace();
+		return (RaceChien) super.getRace();
 	}
 
 	public void setRace(RaceChien race) {
@@ -25,6 +29,7 @@ public class Chien extends Animal {
 	
 	public enum RaceChien implements IRace{
 		Boledogue, Caniche, Carlin, Cairn, Cocker, Colley, Dobermann, DogueAllemand, Eurasier, Mastiff, Pinscher, Pitbull;
+		//BOLEDOGUE, CANICHE, CARLIN, CAIRN, COCKER, COLLEY, DOBERMANN, DOGUEALLEMEND, EURASIER, MASTIFF, PINSCHER, PIBULL;
 	}
 
 }

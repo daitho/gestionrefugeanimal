@@ -1,7 +1,7 @@
+
 package com.mia.itmf.projet.gestionrefugeanimal.model;
 
 public abstract class Personne {
-	private int id;
 	private String nom;
 	private String prenom;
 	private String email;
@@ -11,8 +11,7 @@ public abstract class Personne {
 	public Personne() {
 	}
 	
-	public Personne(int id, String nom, String prenom, String email, String telephone, String adresse) {
-		this.id = id;
+	public Personne(String nom, String prenom, String email, String telephone, String adresse) {
 		this.nom = nom;
 		this.prenom = prenom;
 		this.email = email;
@@ -20,18 +19,8 @@ public abstract class Personne {
 		this.adresse = adresse;
 	}
 	
-	public String getKey() throws Exception {
-		throw new Exception("La methode getKey doit être surcharger");
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
+	public abstract String getKey();
+	
 	public String getNom() {
 		return nom;
 	}
@@ -84,8 +73,8 @@ public abstract class Personne {
 
 	@Override
 	public String toString() {
-		return "Personne [id=" + id + ", nom=" + nom + ", prenom=" + prenom + ", email=" + email + ", telephone="
-				+ telephone + ", adresse=" + adresse + "]";
+		return "Personne [id=" + getKey() + ", nom=" + getNom() + ", prenom=" + getPrenom() + ", email=" + getEmail() + ", telephone="
+				+ getTelephone() + ", adresse=" + getAdresse() + "]";
 	}
 	
 	

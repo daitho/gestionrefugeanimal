@@ -1,39 +1,27 @@
 package com.mia.itmf.projet.gestionrefugeanimal.model;
 
 public abstract class Animal {
-	private int id;
 	private String nom;
-	private IRace race;
+	private final IRace race;
 	private int age;
-	private Sexe sexe;
+	private final Sexe sexe;
 	private Status status;
 
 	public Animal() {
-		super();
+		this.race = null;
+		this.sexe = null;
 	}
 
-	public Animal(int id, String nom, IRace race, int age, Sexe sexe, Status status) {
-		super();
-		this.id = id;
+	public Animal(String nom, IRace race, int age, Sexe sexe) {
 		this.nom = nom;
 		this.race = race;
 		this.age = age;
 		this.sexe = sexe;
-		this.status = status;
+		this.status = Status.DISPONIBLE;
 	}
 	
-	public String getKey() throws Exception {
-		throw new Exception("La methode getKey doit être surcharger");
-	}
+	public abstract String getKey();
 	
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	public String getNom() {
 		return nom;
 	}
@@ -47,9 +35,6 @@ public abstract class Animal {
 		return race;
 	}
 
-	public void setRace(IRace race) {
-		this.race = race;
-	}
 
 	public int getAge() {
 		return age;
@@ -63,9 +48,6 @@ public abstract class Animal {
 		return sexe;
 	}
 
-	public void setSexe(Sexe sexe) {
-		this.sexe = sexe;
-	}
 
 	public Status getStatus() {
 		return status;
@@ -88,12 +70,12 @@ public abstract class Animal {
 		DISPONIBLE, ADOPTER;
 	}
 	
-	public interface IRace{}
+	public  interface IRace{}
 
 	@Override
 	public String toString() {
-		return "Animal [id=" + id + ", nom=" + nom +  ", race=" + race + ", age=" + age
-				+ ", sexe=" + sexe + ", status=" + status + "]";
+		return "Animal [id=" + getKey() + ", nom=" + getNom() +  ", race=" + getRace() 
+		+ ", age=" + getAge()+"mois"+ ", sexe=" + getSexe() + ", status=" + getStatus() + "]";
 	}
 	
 	

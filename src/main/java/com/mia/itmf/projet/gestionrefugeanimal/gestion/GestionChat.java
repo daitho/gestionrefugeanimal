@@ -1,8 +1,9 @@
 package com.mia.itmf.projet.gestionrefugeanimal.gestion;
 
 import com.mia.itmf.projet.gestionrefugeanimal.model.Chat;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Refuge;
 
-public class GestionChat extends GestionAnimal {
+public class GestionChat extends Refuge {
 	
 	public boolean verifierChat(Chat chat) {
 		return super.verifierAnimal(chat);
@@ -10,13 +11,15 @@ public class GestionChat extends GestionAnimal {
 	
 	public boolean ajouterChat(Chat chat) {
 		if(super.ajouterAnimal(chat)) {
+			System.out.println("Chat ajouté ! ");
 			return true;
 		}
 		return false;
 	}
 	
-	public boolean suprimerChat(Chat chat) throws Exception {
+	public boolean supprimerChat(Chat chat) throws Exception {
 		if(super.supprimerAnimal(chat)) {
+			System.out.println("Chat supprimé ! ");
 			return true;
 		}
 		return false;
@@ -32,6 +35,14 @@ public class GestionChat extends GestionAnimal {
 	
 	public String getKey(int key) {
 		return "Chat-"+key;
+	}
+	
+	public int getNombreChat() {
+		return super.getNombreAnimal("Chat");
+	}
+	
+	public void afficherListeChat() {
+		super.afficherListeAnimal("Chat");
 	}
 
 }

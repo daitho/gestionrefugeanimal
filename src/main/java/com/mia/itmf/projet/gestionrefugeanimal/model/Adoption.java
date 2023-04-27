@@ -1,23 +1,32 @@
 package com.mia.itmf.projet.gestionrefugeanimal.model;
 
 public class Adoption {
-	private int id;
+	private final int id;
 	private Status status;
 	private String date;
 	private Adoptant adoptant;
 	private Animal animal;
+	private static int COUNT = 0;
 	
 	
 	public Adoption() {
-		super();
+		this.id = COUNT++;
 	}
+	
+	
+
+	public Adoption(Status status, String date, Adoptant adoptant, Animal animal) {
+		this.id = COUNT++;
+		this.status = status;
+		this.date = date;
+		this.adoptant = adoptant;
+		this.animal = animal;
+	}
+
+
 
 	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+		return this.id;
 	}
 
 	public Status getStatus() {
@@ -62,12 +71,12 @@ public class Adoption {
 	}
 
 	public enum Status{
-		attente, accepté, rejeté;
+		ATTENTE, ACCEPTE, REJETE;
 	}
 
 	@Override
 	public String toString() {
-		return "Adoption [id=" + getId() + ", status=" + status + ", date=" + date + ", Nom =" + adoptant.getNom() + "]";
+		return "Adoption [id=" + getId() + ", status=" + getStatus() + ", date=" + getDate() + ", Nom adoptant=" + getAdoptant().getNom() +", Nom animal"+getAnimal().getNom()+ "]";
 	}
 	
 	
