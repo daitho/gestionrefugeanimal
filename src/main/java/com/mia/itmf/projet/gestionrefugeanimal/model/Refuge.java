@@ -17,7 +17,7 @@ public class Refuge {
 	private String nom;
 	private String localisation;
 	private int nombreAnimal;
-	private final List<Adoption> listeAdoption = new ArrayList<Adoption>();
+	private final Map<Integer, Adoption> listeAdoption = new HashMap<Integer, Adoption>();
 	private Map<String, Animal> mapAnimal = new HashMap<String, Animal>();
 	private Map<String, Personne> mapPersonne = new HashMap<String, Personne>();
 	
@@ -32,12 +32,8 @@ public class Refuge {
 		this.nombreAnimal = nombreAnimal;
 	}
 	
-	public List<Adoption> getListeAdoption(){
-		return Collections.unmodifiableList(listeAdoption);
-	}
-	
-	//Gestion de la partie adoption
-	public boolean demanderAdoption(Adoptant adoptant, Animal animal) throws Exception {
+	//Gestion de la partie adoption-------------------------------------------------------------------------
+	public Adoption demanderAdoption(Adoptant adoptant, Animal animal) throws Exception {
 		
 		if(adoptant == null || animal == null) {
 			throw new Exception("Mauvaise information");
@@ -50,61 +46,61 @@ public class Refuge {
 		adoption.setStatus(Status.ATTENTE);
 		adoption.setAdoptant(adoptant);
 		adoption.setAnimal(animal);
-		return this.listeAdoption.add(adoption);
+		return this.listeAdoption.put(adoption.getId(), adoption);
 	}
 	
 	public boolean accepterDemandeAdoption(int id) {
 		Adoption adoption = retrouverAdoption(id);
-		if(listeAdoption.contains(adoption)){
-			listeAdoption.get(id).setStatus(Status.ACCEPTE);
-			
-			mapAnimal.replace(localisation, null);
-			return true;
+		if(adoption == null) {
+			return false;
 		}
-		return false;
+		adoption.setStatus(Status.ACCEPTE);
+		listeAdoption.replace(adoption.getId(), adoption);
+		return true;
 	}
 	
 	public boolean refuserDemandeAdoption(int id) {
 		Adoption adoption = retrouverAdoption(id);
-		if(listeAdoption.contains(adoption)){
-			listeAdoption.get(id).setStatus(Status.REJETE);
-			return true;
+		if(adoption == null) {
+			return false;
 		}
-		return false;
+		adoption.setStatus(Status.REJETE);
+		listeAdoption.replace(adoption.getId(), adoption);
+		return true;
 	}
 	
 	public boolean supprimerDemandeAdoption(int id) {
 		Adoption adoption = retrouverAdoption(id);
-		if(listeAdoption.contains(adoption)){
-			return listeAdoption.remove(adoption);
+		if(listeAdoption.containsKey(id)){
+			
+			return listeAdoption.remove(id, adoption);
 		}
 		return false;
 	} 
 	
 	public Adoption retrouverAdoption(int idAdoption) {
-		for(Adoption adoption : listeAdoption) {
-			if(adoption.getId() == idAdoption) {
-				return adoption;
-			}
+		if(listeAdoption.containsKey(idAdoption)) {
+			return listeAdoption.get(idAdoption);
 		}
 		return null;
 	}
 	
 	public List<Adoption> retrouverAdoptionParAdoptant(String nomAdoptant){
 		List<Adoption> listeAdoptant = new ArrayList<Adoption>();
-		for(Adoption adoption : listeAdoption) {
-			if(adoption.getAdoptant().getNom().contains(nomAdoptant)) {
-				listeAdoptant.add(adoption);
+		for(Map.Entry<Integer, Adoption> keyValue : listeAdoption.entrySet()) {
+			if(keyValue.getValue().getAdoptant().getNom().contains(nomAdoptant)) {
+				listeAdoptant.add(keyValue.getValue());
 			}
 		}
 		return listeAdoptant;
 	}
 	
-	//Partie animal
+	//Partie animal-----------------------------------------------------------------------------------
 	protected boolean ajouterAnimal(Animal animal) {
 		if(!verifierAnimal(animal)) {
 			try {
 				mapAnimal.put(animal.getKey(), animal);
+				setNombreAnimal(getNombreAnimal()+1);//incrémentation du nombre d'animal
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -117,6 +113,7 @@ public class Refuge {
 	protected boolean supprimerAnimal(Animal animal){
 		if(verifierAnimal(animal)) {
 			mapAnimal.remove(animal.getKey());
+			setNombreAnimal(getNombreAnimal()-1);
 			return true;
 		}
 		return false;
@@ -169,8 +166,8 @@ public class Refuge {
 		}
 	}
 	
-	//Partie personne
-	protected boolean verifierPersonne(Personne personne) {
+	//Partie personne--------------------------------------------------------------------
+	private boolean verifierPersonne(Personne personne) {
 		try {
 			return personne != null && verifierPersonne(personne.getKey());
 		} catch (Exception e) {
@@ -179,11 +176,11 @@ public class Refuge {
 		return false;
 	}
 	
-	protected boolean verifierPersonne(String key) {
+	private boolean verifierPersonne(String key) {
 		return mapPersonne.containsKey(key);
 	}
 	
-	protected boolean ajouterPersonne(Personne personne) {
+	public boolean ajouterPersonne(Personne personne) {
 		if(!verifierPersonne(personne)) {
 			try {
 				mapPersonne.put(personne.getKey(), personne);
@@ -195,14 +192,14 @@ public class Refuge {
 		return false;
 	}
 	
-	protected boolean supprimerPersonne(Personne peronne) throws Exception {
-		if(verifierPersonne(peronne)) {
-			return mapPersonne.remove(peronne.getKey(), peronne);
+	public boolean supprimerPersonne(Personne personne) throws Exception {
+		if(verifierPersonne(personne)) {
+			return mapPersonne.remove(personne.getKey(), personne);
 		}
 		return false;
 	}
 	
-	protected boolean miseAJourPersonne(Personne personne) throws Exception {
+	public boolean miseAJourPersonne(Personne personne) throws Exception {
 		if(verifierPersonne(personne)) {
 			mapPersonne.replace(personne.getKey(), personne);
 			return true;
@@ -210,28 +207,135 @@ public class Refuge {
 		return false;
 	}
 	
-	protected Personne retrouverEmploye(String key) {
-		Employe result = null;
-		for(Employe employe : listeEmploye()) {
-			if(employe.getKey().equals(key)) {
-				result = employe;
-				break;
+	protected int getNombrePersonne(String nomClass) {
+		int count = 0;
+		for(Map.Entry<String, Personne> keyValue : mapPersonne.entrySet()) {
+			if(keyValue.getValue().getClass().getSimpleName().equals(nomClass)) {
+				count++;
 			}
 		}
-		return result;
+		return count;
 	}
 	
-	private List<Employe> listeEmploye(){
-		List<Employe> liste = new ArrayList<Employe>();
-		for(Personne personne : mapPersonne.values()) {
-			if(personne instanceof Employe) {
-				liste.add((Employe) personne);
-			}
+	protected Personne retrouverPersonne(String key) {
+		if(verifierPersonne(key)) {
+			return mapPersonne.get(key);
 		}
-		return liste;
+		return null;
 	}
+	
+	//Gestion employe---------------------------------------------------------------------------
+	public boolean ajouterEmploye(Employe employe) {
+		if(ajouterPersonne(employe)) {
+			System.out.println("Employe ajouter ! ");
+			return true;
+			
+		}
+		return false;
+	}
+	
+	public boolean supprimerEmploye(Employe employe) throws Exception {
+		if(verifierPersonne(employe)) {
+			return mapPersonne.remove(employe.getKey(), employe);
+		}
+		return false;
+	}
+	
+	public boolean miseAJourEmploye(Employe employe) throws Exception {
+		if(verifierPersonne(employe)) {
+			mapPersonne.replace(employe.getKey(), employe);
+			return true;
+		}
+		return false;
+	}
+	
+	public Employe retrouverEmploye(int key) {
+		return (Employe) retrouverPersonne(getKeyEmploye(key));
+	}
+	
+	private String getKeyEmploye(int key) {
+		return "Employe-"+key;
+	}
+	
+	//Gestion adoptant---------------------------------------------------------------------------
+	public boolean ajouterAdoptant(Adoptant adoptant) {
+		if(ajouterPersonne(adoptant)) {
+			System.out.println("Adoptant ajouter ! ");
+			return true;
+			
+		}
+		return false;
+	}
+	
+	public boolean supprimerAdoptant(Adoptant adoptant) throws Exception {
+		if(verifierPersonne(adoptant)) {
+			return mapPersonne.remove(adoptant.getKey(), adoptant);
+		}
+		return false;
+	}
+	
+	public boolean miseAJourAdoptant(Adoptant adoptant) throws Exception {
+		if(verifierPersonne(adoptant)) {
+			mapPersonne.replace(adoptant.getKey(), adoptant);
+			return true;
+		}
+		return false;
+	}
+	
+	public Adoptant retrouverAdoptant(int key) {
+		return (Adoptant) retrouverPersonne(getKeyAdoptant(key));
+	}
+	
+	private String getKeyAdoptant(int key) {
+		return "Adoptant-"+key;
+	}
+	
+	public int getNombreAdoptant() {
+		return getNombrePersonne("Adoptant");
+	}
+	
+//	public Employe retrouverEmploye(String key) {
+//		Employe result = null;
+//		for(Employe employe : listeEmploye()) {
+//			if(employe.getKey().equals(key)) {
+//				result = employe;
+//				break;
+//			}
+//		}
+//		return result;
+//	}
+//	
+//	private List<Employe> listeEmploye(){
+//		List<Employe> liste = new ArrayList<Employe>();
+//		for(Personne personne : mapPersonne.values()) {
+//			if(personne instanceof Employe) {
+//				liste.add((Employe) personne);
+//			}
+//		}
+//		return liste;
+//	}
+//	public Adoptant retrouverAdoptant(String key) {
+//		Adoptant result = null;
+//		for(Adoptant adoptant : listeAdoptant()) {
+//			if(adoptant.getKey().equals(key)) {
+//				result = adoptant;
+//				break;
+//			}
+//		}
+//		return result;
+//	}
+//	
+//	private List<Adoptant> listeAdoptant(){
+//		List<Adoptant> liste = new ArrayList<Adoptant>();
+//		for(Personne personne : mapPersonne.values()) {
+//			if(personne instanceof Adoptant) {
+//				liste.add((Adoptant) personne);
+//			}
+//		}
+//		return liste;
+//	}
 
-	//Getter et setter
+	//Getter et setter--------------------------------------------------------------------
 	public int getId() {
 		return this.id;
 	}
@@ -259,6 +363,129 @@ public class Refuge {
 		this.nombreAnimal = nombreAnimal;
 	}
 
+	//gestion chat-----------------------------------------------------------------------------------
+	public boolean verifierChat(Chat chat) {
+		return verifierAnimal(chat);
+	}
+	
+	public boolean ajouterChat(Chat chat) {
+		if(ajouterAnimal(chat)) {
+			System.out.println("Chat ajouté ! ");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean supprimerChat(Chat chat) throws Exception {
+		if(supprimerAnimal(chat)) {
+			System.out.println("Chat supprimé ! ");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean miseAJourChat(Chat chat) throws Exception {
+		return miseAJourAnimal(chat);
+	}
+	
+	public Chat retrouverChat(int key) {
+		return (Chat) retrouverAnimal(getKeyChat(key));
+	}
+	
+	public String getKeyChat(int key) {
+		return "Chat-"+key;
+	}
+	
+	public int getNombreChat() {
+		return getNombreAnimal("Chat");
+	}
+	
+	public void afficherListeChat() {
+		afficherListeAnimal("Chat");
+	}
+	
+	//Gestion chien--------------------------------------------------------------------------------------------
+	public boolean verifierChien(Chien chien) {
+		return verifierAnimal(chien);
+	}
+	
+	public boolean ajouterChien(Chien chien) {
+		if(ajouterAnimal(chien)) {
+			System.out.println("Chien ajouté !");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean supprimerChien(Chien chien){
+		if(supprimerAnimal(chien)) {
+			System.out.println("Chien supprimé !");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean miseAJourChien(Chien chien) throws Exception {
+		return miseAJourAnimal(chien);
+	}
+	
+	public Chien retrouverChien(int key) {
+		return (Chien) retrouverAnimal(getKeyChien(key));
+	}
+	
+	public String getKeyChien(int key) {
+		return "Chien-"+key;
+	}
+	
+	public int getNombreChien() {
+		return getNombreAnimal("Chien");
+	}
+	
+	public void afficherListeChien() {
+		afficherListeAnimal("Chien");
+	}
+	
+	//Gestion lapin----------------------------------------------------------------------------
+	public boolean verifierLapin(Lapin chat) {
+		return verifierAnimal(chat);
+	}
+	
+	public boolean ajouterLapin(Lapin chat) {
+		if(ajouterAnimal(chat)) {
+			System.out.println("Lapin ajouté ! ");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean supprimerLapin(Lapin chat) throws Exception {
+		if(supprimerAnimal(chat)) {
+			System.out.println("Lapin supprimé ! ");
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean miseAJourLapin(Lapin chat) throws Exception {
+		return miseAJourAnimal(chat);
+	}
+	
+	public Lapin retrouverLapin(int key) {
+		return (Lapin) retrouverAnimal(getKeyLapin(key));
+	}
+	
+	public String getKeyLapin(int key) {
+		return "Lapin-"+key;
+	}
+	
+	public int getNombreLapin() {
+		return getNombreAnimal("Lapin");
+	}
+	
+	public void afficherListeLapin() {
+		afficherListeAnimal("Lapin");
+	}
+	
 	@Override
 	public String toString() {
 		return "Refuge [id=" + getId() +", nom=" + getNom() + ", localisation=" + getLocalisation() + ", nombreAnimal=" + getNombreAnimal()+ "]";

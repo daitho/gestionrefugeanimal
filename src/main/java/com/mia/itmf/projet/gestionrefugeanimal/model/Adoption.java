@@ -6,7 +6,7 @@ public class Adoption {
 	private String date;
 	private Adoptant adoptant;
 	private Animal animal;
-	private static int COUNT = 0;
+	private static int COUNT = 1;
 	
 	
 	public Adoption() {
@@ -76,7 +76,7 @@ public class Adoption {
 
 	@Override
 	public String toString() {
-		return "Adoption [id=" + getId() + ", status=" + getStatus() + ", date=" + getDate() + ", Nom adoptant=" + getAdoptant().getNom() +", Nom animal"+getAnimal().getNom()+ "]";
+		return "Adoption [id= " + getId() + ", status= " + getStatus() + ", date= " + getDate() + ", Nom adoptant= " + getAdoptant().getNom() +", Nom animal= "+getAnimal().getNom()+ "]";
 	}
 	
 	

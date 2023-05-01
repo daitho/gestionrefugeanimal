@@ -7,12 +7,12 @@ public class Adoptant extends Personne {
 	
 	public Adoptant() {
 		super();
-		this.key = getClass().getName()+"-"+ COUNT++;
+		this.key = "Adoptant-"+ COUNT++;
 	}
 	
 	public Adoptant(String nom, String prenom, String email, String telephone, String adresse) {
 		super(nom,prenom,email,telephone,adresse);
-		this.key = getClass().getName()+"-"+ COUNT++;
+		this.key = "Adoptant-"+ COUNT++;
 	}
 	
 	public String getKey(){

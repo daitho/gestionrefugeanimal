@@ -6,12 +6,12 @@ public class Employe extends Personne{
 
 	public Employe() {
 		super();
-		this.key = getClass().getName()+"-"+ COUNT++;
+		this.key = "Employe-"+ COUNT++;
 	}
 
 	public Employe(String nom, String prenom, String email, String telephone, String adresse) {
 		super(nom, prenom, email, telephone, adresse);
-		this.key = getClass().getName()+"-"+ COUNT++;
+		this.key = "Employe-"+ COUNT++;
 	}
 	
 	public String getKey(){
