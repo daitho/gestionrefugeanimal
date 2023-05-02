@@ -5,11 +5,22 @@ public abstract class Animal {
 	private final IRace race;
 	private int age;
 	private final Sexe sexe;
-	private Status status;
+	//private final Espece espece;
+	private StatusAnimal status;
+	private Refuge refuge;
+
+	public Refuge getRefuge() {
+		return refuge;
+	}
+
+	public void setRefuge(Refuge refuge) {
+		this.refuge = refuge;
+	}
 
 	public Animal() {
 		this.race = null;
 		this.sexe = null;
+		//this.espece =  null;
 	}
 
 	public Animal(String nom, IRace race, int age, Sexe sexe) {
@@ -17,7 +28,8 @@ public abstract class Animal {
 		this.race = race;
 		this.age = age;
 		this.sexe = sexe;
-		this.status = Status.DISPONIBLE;
+		//this.espece = espece;
+		this.status = StatusAnimal.DISPONIBLE;
 	}
 	
 	public abstract String getKey();
@@ -49,11 +61,11 @@ public abstract class Animal {
 	}
 
 
-	public Status getStatus() {
+	public StatusAnimal getStatus() {
 		return status;
 	}
 
-	public void setStatus(Status status) {
+	public void setStatus(StatusAnimal status) {
 		this.status = status;
 	}
 
@@ -66,15 +78,16 @@ public abstract class Animal {
 		MAXULIN, FEMININ;
 	}
 	
-	public enum Status{
+	public enum StatusAnimal{
 		DISPONIBLE, ADOPTER;
 	}
+	
 	
 	public  interface IRace{}
 
 	@Override
 	public String toString() {
-		return "Animal [id=" + getKey() + ", nom=" + getNom() +  ", race=" + getRace() 
+		return "Animal [id=" + getKey() +", Nom refuge = "+getRefuge().getNom()+ ", nom Animal=" + getNom() +  ", race=" + getRace() 
 		+ ", age=" + getAge()+"mois"+ ", sexe=" + getSexe() + ", status=" + getStatus() + "]";
 	}
 	
