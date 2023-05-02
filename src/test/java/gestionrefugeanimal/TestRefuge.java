@@ -77,5 +77,11 @@ public class TestRefuge {
 		assertEquals(refuge.retrouverAdoption(2).getStatus().toString(), "REJETE");
 	}
 	
+	@Test @Order(5)
+	public void test5_ajouterAnimal() throws Exception {
+		refuge.ajouterChat(new Chat("Minou", RaceChat.Anatoli, 5, Sexe.MAXULIN));
+		assertEquals(refuge.getNombreAnimal(), 10);
+	}
+	
 	
 }
