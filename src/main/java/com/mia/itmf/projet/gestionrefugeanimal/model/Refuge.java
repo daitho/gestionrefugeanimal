@@ -1,15 +1,22 @@
 package com.mia.itmf.projet.gestionrefugeanimal.model;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
+
+import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAnimal;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.Sexe;
+import com.mia.itmf.projet.gestionrefugeanimal.tools.MapTool;
 
 public class Refuge {
 	private static int COUNT = 0;
 	private final int id;
 	private String nom;
 	private String localisation;
-	private Map<String, Animal> mapAnimal = new HashMap<String, Animal>();
-	private Map<String, Personne> mapPersonne = new HashMap<String, Personne>();
+	private Map<String, Animal> mapAnimal = new LinkedHashMap<String, Animal>();
+	private Map<String, Employe> mapEmploye = new TreeMap<String, Employe>();
 	
 	public Refuge() {
 		this.id = COUNT++;
@@ -22,7 +29,7 @@ public class Refuge {
 	}
 	
 	//Partie animal-----------------------------------------------------------------------------------
-	public boolean ajouterAnimal(Animal animal) {
+	public boolean ajouterAnimal(Animal animal) throws ExceptionAnimal {
 		if(!verifierAnimal(animal)) {
 			try {
 				animal.setRefuge(this);
@@ -36,7 +43,7 @@ public class Refuge {
 		return false;
 	}
 	
-	public boolean supprimerAnimal(Animal animal){
+	public boolean supprimerAnimal(Animal animal) throws ExceptionAnimal{
 		if(verifierAnimal(animal)) {
 			mapAnimal.remove(animal.getKey());
 
@@ -46,7 +53,7 @@ public class Refuge {
 	}
 	
 	public boolean miseAJourAnimal(Animal animal) throws Exception {
-		if(verifierAnimal(animal)) {
+		if(!verifierAnimal(animal)) {
 			animal.setRefuge(this);
 			mapAnimal.replace(animal.getKey(), animal);
 			return true;
@@ -54,28 +61,56 @@ public class Refuge {
 		return false;
 	}
 	
-	protected boolean verifierAnimal(Animal animal) {
-		try {
-			return animal != null && verifierAnimal(animal.getKey());
-		} catch (Exception e) {
-			e.printStackTrace();
+	protected boolean verifierAnimal(Animal animal) throws ExceptionAnimal{
+		if(animal != null) {
+			for (Animal resultAnimal : mapAnimal.values()) {
+				if(resultAnimal.getAge() == animal.getAge() && resultAnimal.getNom().equals(animal.getNom()) && resultAnimal.getSexe().equals(animal.getSexe()) && resultAnimal.getStatus().equals(animal.getStatus())) {
+					return true;
+				}
+			}
+		}else {
+			throw new ExceptionAnimal("L'animal est null");
 		}
 		return false;
 	}
 	
-	protected boolean verifierAnimal(String key) {
-		return mapAnimal.containsKey(key);
+//	protected boolean verifierAnimal(String key) {
+//		return mapAnimal.containsKey(key);
+//	}
+//	
+//	public Animal retrouverAnimal(String key) {
+//		if(verifierAnimal(key)) {
+//			return mapAnimal.get(key);
+//		}
+//		return null;
+//	}
+//	
+	public Animal retrouverUnAnimal(String nom, Integer age, Sexe sexe) throws ExceptionAnimal {
+
+		return MapTool.getMapElement(mapAnimal, Animal.class, false, addElementListAnimaux(nom, age, sexe));
 	}
 	
-	public Animal retrouverAnimal(String key) {
-		if(verifierAnimal(key)) {
-			return mapAnimal.get(key);
+	public List<Animal> retrouverAnimaux(String nom, Integer age, Sexe sexe) throws ExceptionAnimal {
+		return MapTool.getMapElements(mapAnimal, true, addElementListAnimaux(nom, age, sexe));
+	}
+	
+	private List<MapTool.SearchCriteria<Animal>> addElementListAnimaux(String nom, Integer age, Sexe sexe) throws ExceptionAnimal{
+		if(nom==null && age==null && sexe==null) {
+			throw new ExceptionAnimal("La recherche dois contenir au moins une valeur");
 		}
-		return null;
+		List<MapTool.SearchCriteria<Animal>> criteriaList = new ArrayList<>();
+		if(nom != null) {
+			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getNom, nom));
+		}else if(sexe != null) {
+			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getSexe, sexe));
+		}else if(age != null && age >= 0) {
+			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getAge, age));
+		}
+		
+		return criteriaList;
 	}
 	
-	
-//	public int getNombreAnimal(String nomEspece) {
+//	public int getNombreEspeceAnimal(String nomEspece) {
 //		int count = 0;
 //		for(Map.Entry<String, Animal> keyValue : mapAnimal.entrySet()) {
 //			if(keyValue.getValue().getClass().getSimpleName().equals(nomEspece)) {
@@ -86,34 +121,33 @@ public class Refuge {
 //	}
 	
 	
-	public void afficherListeAnimal(String nomEspece) {
-		nomEspece = nomEspece.substring(0,1).toUpperCase()+""+nomEspece.substring(1, nomEspece.length()).toLowerCase();
+	public void afficherListeAnimalParEspece(String nomEspece) {
 		System.out.println(nomEspece);
 		for(Map.Entry<String, Animal> keyValue : mapAnimal.entrySet()) {
-			if(keyValue.getValue().getClass().getSimpleName().contains(nomEspece)) {
+			if(keyValue.getValue().getClass().getSimpleName().toUpperCase().contains(nomEspece.toUpperCase())) {
 				System.out.println(keyValue.getValue().toString());
 			}
 		}
 	}
 	
-	//Partie personne--------------------------------------------------------------------
-	protected boolean verifierPersonne(Personne personne) {
+	//Partie employe--------------------------------------------------------------------
+	protected boolean verifierEmploye(Employe employe) {
 		try {
-			return personne != null && verifierPersonne(personne.getKey());
+			return employe != null && verifierEmploye(employe.getKey());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
 	
-	protected boolean verifierPersonne(String key) {
-		return mapPersonne.containsKey(key);
+	protected boolean verifierEmploye(String key) {
+		return mapEmploye.containsKey(key);
 	}
 	
-	public boolean ajouterPersonne(Personne personne) {
-		if(!verifierPersonne(personne)) {
+	public boolean ajouterEmploye(Employe employe) {
+		if(!verifierEmploye(employe)) {
 			try {
-				mapPersonne.put(personne.getKey(), personne);
+				mapEmploye.put(employe.getKey(), employe);
 				return true;
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -122,42 +156,80 @@ public class Refuge {
 		return false;
 	}
 	
-	public boolean supprimerPersonne(Personne personne) throws Exception {
-		if(verifierPersonne(personne)) {
-			return mapPersonne.remove(personne.getKey(), personne);
+	public boolean supprimerEmploye(Employe employe) throws Exception {
+		if(verifierEmploye(employe)) {
+			return mapEmploye.remove(employe.getKey(), employe);
 		}
 		return false;
 	}
 	
-	public boolean miseAJourPersonne(Personne personne) throws Exception {
-		if(verifierPersonne(personne)) {
-			mapPersonne.replace(personne.getKey(), personne);
+	public boolean miseAJourEmploye(Employe employe) throws Exception {
+		if(verifierEmploye(employe)) {
+			mapEmploye.replace(employe.getKey(), employe);
 			return true;
 		}
 		return false;
 	}
 	
-	public int getNombrePersonne(String nomClass) {
-		int count = 0;
-		for(Map.Entry<String, Personne> keyValue : mapPersonne.entrySet()) {
-			if(keyValue.getValue().getClass().getSimpleName().equals(nomClass)) {
-				count++;
-			}
-		}
-		return count;
+	public int getNombreEmploye() {
+		return mapEmploye.size();
 	}
 	
-	protected Personne retrouverPersonne(String key) {
-		if(verifierPersonne(key)) {
-			return mapPersonne.get(key);
+	public void consulterListeEmployes() {
+		for(Employe employe : mapEmploye.values()) {
+			System.out.println(employe.toString());
 		}
-		return null;
 	}
 	
-	public Adoptant retrouverAdoptant(String key) {
+//	public <T> List<String> listerVariables( Class<T> type, String... criteres ) {
+//		var liste = new ArrayList<String>();
+//		
+//		
+//		for(Field field : type.getDeclaredFields()) {
+//			
+//			liste.add(field.getName());
+//		}
+//		
+//		return liste;
+//	}
+	
+	public Employe retrouverUnEmploye(String nom, String prenom, String email) {
+
+		return (Employe) retrouverEmploye(nom, prenom, email, false);
+	}
+	
+	public List<Employe> retrouverEmploye(String nom,String prenom, String email, boolean unique) {
+        List<MapTool.SearchCriteria<Employe>> criteriaList = new ArrayList<>();
 		
-	    return (Adoptant) retrouverPersonne(key);
-    }
+		criteriaList.add(new MapTool.SearchCriteria<>(Employe::getNom, nom));
+		criteriaList.add(new MapTool.SearchCriteria<>(Employe::getPrenom, prenom));
+		criteriaList.add(new MapTool.SearchCriteria<>(Employe::getEmail, email));
+		
+		List<Employe> result = MapTool.getMapElements(mapEmploye, unique, criteriaList);
+
+		return result;
+	}
+	
+//	public Personne retrouverPersonne(String... criteres) {
+//		Generique generique = new Generique();
+////		if(verifierPersonne(key)) {
+////			return mapPersonne.get(key);
+////		}
+//		return (Personne) generique.rechercher(mapPersonne, false, criteres);
+//	}
+//	
+//	public List<Personne> retrouverPersonne(boolean unique, String... criteres) {
+//		Generique generique = new Generique();
+////		if(verifierPersonne(key)) {
+////			return mapPersonne.get(key);
+////		}
+//		return generique.rechercher(mapPersonne, unique, criteres);
+//	}
+//	
+//	public Adoptant retrouverAdoptant(String key) {
+//		
+//	    return (Adoptant) retrouverPersonne(key);
+//    }
 
 	//Getter et setter--------------------------------------------------------------------
 	public int getId() {

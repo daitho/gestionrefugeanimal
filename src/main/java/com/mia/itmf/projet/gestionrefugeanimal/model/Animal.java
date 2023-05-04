@@ -3,7 +3,7 @@ package com.mia.itmf.projet.gestionrefugeanimal.model;
 public abstract class Animal {
 	private String nom;
 	private final IRace race;
-	private int age;
+	private Integer age;
 	private final Sexe sexe;
 	//private final Espece espece;
 	private StatusAnimal status;
@@ -23,7 +23,7 @@ public abstract class Animal {
 		//this.espece =  null;
 	}
 
-	public Animal(String nom, IRace race, int age, Sexe sexe) {
+	public Animal(String nom, IRace race, Integer age, Sexe sexe) {
 		this.nom = nom;
 		this.race = race;
 		this.age = age;
@@ -48,11 +48,11 @@ public abstract class Animal {
 	}
 
 
-	public int getAge() {
+	public Integer getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(Integer age) {
 		this.age = age;
 	}
 

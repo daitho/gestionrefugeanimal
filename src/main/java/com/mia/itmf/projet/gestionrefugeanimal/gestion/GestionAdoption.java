@@ -5,9 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 
+import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAdoption;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Adoptant;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Adoption;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Adoption.Status;
@@ -24,10 +24,10 @@ private final List<Adoption> listeAdoption = new ArrayList<>();
    }
 	
 	//Gestion de la partie adoption-------------------------------------------------------------------------
-	public Adoption demanderAdoption(Adoptant adoptant, Animal animal) throws Exception {
+	public Adoption demanderAdoption(Adoptant adoptant, Animal animal) throws ExceptionAdoption{
 		
 		if(adoptant == null || animal == null) {
-			throw new Exception("Mauvaise information");
+			throw new ExceptionAdoption("Mauvaise information");
 		}
 		Adoption adoption = new Adoption();
 		DateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
@@ -54,39 +54,47 @@ private final List<Adoption> listeAdoption = new ArrayList<>();
 	}
 	
 	//Acepter et refuser  Adoption
-	public boolean accepterDemandeAdoption(Adoption adoption) {
+	public boolean accepterDemandeAdoption(Adoption adoption) throws ExceptionAdoption {
 		if(verifierAdoption(adoption)) {
-			adoption.setStatus(Status.ACCEPTE);
-			adoption.getAnimal().setStatus(StatusAnimal.ADOPTER);
-			for (Adoption adoption1 : listeAdoption) {
-				if(adoption1.getAnimal().equals(adoption.getAnimal()) && !adoption1.getAdoptant().equals(adoption.getAdoptant())) {
-					refuserDemandeAdoption(adoption1);
+			if(adoption.getStatus().equals(Status.ATTENTE)) {
+				adoption.setStatus(Status.ACCEPTE);
+				adoption.getAnimal().setStatus(StatusAnimal.ADOPTER);
+				for (Adoption adoption1 : listeAdoption) {
+					if(adoption1.getAnimal().equals(adoption.getAnimal()) && !adoption1.getAdoptant().equals(adoption.getAdoptant())) {
+						refuserDemandeAdoption(adoption1);
+					}
 				}
-			}
-			return true;
+				return true;
+			}else {
+				throw new ExceptionAdoption("Cette demande n'est plus en attente");
+			} 
+			
 		}
 		return false;
 		
 	}
 	
-	public boolean refuserDemandeAdoption(Adoption adoption) {
+	public boolean refuserDemandeAdoption(Adoption adoption) throws ExceptionAdoption {
 		if(adoption == null) {
-			return false;
+			throw new ExceptionAdoption("L'adoption ne doit pas être vide !");
 		}
 		adoption.setStatus(Status.REJETE);
 		//listeAdoption.replace(adoption.getId(), adoption);
 		return true;
 	}
 	
-	public boolean supprimerDemandeAdoption(Adoption adoption) {
+	public boolean supprimerDemandeAdoption(Adoption adoption) throws ExceptionAdoption {
 		if(verifierAdoption(adoption)){
 			adoption.getAnimal().setStatus(StatusAnimal.DISPONIBLE);
 			return listeAdoption.remove(adoption);
 		}
-		return false;
+		throw new ExceptionAdoption("Cette adoption n'existe pas dans le refuge !");
 	} 
 	
-	public List<Adoption> retrouverAdoptionParAnimal(Animal animal) {
+	public List<Adoption> retrouverAdoptionParAnimal(Animal animal) throws ExceptionAdoption {
+		if(animal == null) {
+			throw new ExceptionAdoption("L'animal ne doit pas être vide !");
+		}
 		List<Adoption> listes = new ArrayList<>();
 		for(Adoption adoption : listeAdoption) {
 			if(adoption.getAnimal().equals(animal)) {
@@ -96,7 +104,10 @@ private final List<Adoption> listeAdoption = new ArrayList<>();
 		return listes;
 	}
 	
-	public Adoption retrouverAdoption(Adoptant adoptant, Animal animal) {
+	public Adoption retrouverAdoption(Adoptant adoptant, Animal animal) throws ExceptionAdoption {
+		if(adoptant == null || animal == null) {
+			throw new ExceptionAdoption("L'adoptant ou l'animal ne doit pas être vide !");
+		}
 		for(Adoption adoption : listeAdoption) {
 			if(adoption.getAnimal().equals(animal) && adoption.getAdoptant().equals(adoptant)) {
 				return adoption;
@@ -105,7 +116,10 @@ private final List<Adoption> listeAdoption = new ArrayList<>();
 		return null;
 	}
 	
-	public List<Adoption> retrouverAdoptionParAdoptant(String nomAdoptant){
+	public List<Adoption> retrouverAdoptionParAdoptant(String nomAdoptant) throws ExceptionAdoption{
+		if(nomAdoptant == null) {
+			throw new ExceptionAdoption("Le nom de l'adoptant est vide !");
+		}
 		List<Adoption> listes = new ArrayList<>();
 		for(Adoption adoption : listeAdoption) {
 			if(adoption.getAdoptant().getNom().contains(nomAdoptant) || adoption.getAdoptant().getPrenom().contains(nomAdoptant)) {
@@ -116,6 +130,7 @@ private final List<Adoption> listeAdoption = new ArrayList<>();
 		return listes;
 	}
 	
+	//
 
 
 }

@@ -7,6 +7,10 @@ public abstract class Personne {
 	private String email;
 	private String telephone;
 	private String adresse;
+	
+	public enum Critere{
+		NOM,PRENOM,EMAIL;
+	}
 
 	public Personne() {
 	}
