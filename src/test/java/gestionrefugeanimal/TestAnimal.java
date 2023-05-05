@@ -31,6 +31,7 @@ public class TestAnimal {
 			gestionAnimal.ajouterAnimal(new Chien("Chouchou", RaceChien.Caniche , 5, Sexe.FEMININ));
 			gestionAnimal.ajouterAnimal(new Chien("Pipi", RaceChien.Cocker , 2, Sexe.MAXULIN));
 			gestionAnimal.ajouterAnimal(new Chien("Charline", RaceChien.Boledogue , 4, Sexe.FEMININ));
+			
 			//Chat
 			gestionAnimal.ajouterAnimal(new Chat("Chalotte", RaceChat.Abyssin, 2, Sexe.FEMININ));
 			gestionAnimal.ajouterAnimal(new Chat("Jiff", RaceChat.Anatoli, 5, Sexe.MAXULIN));
@@ -76,7 +77,8 @@ public class TestAnimal {
 	@Test @Order(3)
 	public void test13_modifierLapin() {
 		try {
-			gestionAnimal.miseAJourAnimal("Lapin-4","Minono",null,null);
+			Lapin lapin = (Lapin) gestionAnimal.retrouverUnAnimal("Milomilo", RaceLapin.Normand, null,null);
+			gestionAnimal.miseAJourAnimal(lapin,"Minono",null);
 			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceLapin.Normand, null, null).toString(), "Animal [id=Lapin-4, Nom refuge = Manomano, nom Animal=Minono, race=Normand, age=5mois, sexe=MAXULIN, status=DISPONIBLE]");
 		} catch (ExceptionAnimal e) {
 			e.printStackTrace();
@@ -88,7 +90,7 @@ public class TestAnimal {
 	@Test @Order(4)
 	public void test14_supprimererLapin() {
 		try {
-			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceChat.Burmese, 5, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceLapin.Normand, 5, null));
 		} catch (ExceptionAnimal e) {
 				e.printStackTrace();
 		}
@@ -123,7 +125,8 @@ public class TestAnimal {
 	@Test @Order(3)
 	public void test23_modifierChien() {
 		try {
-			gestionAnimal.miseAJourAnimal("Chien-4","Minono",null,null);
+			Chien chien = (Chien) gestionAnimal.retrouverUnAnimal("Milomilo", null, 5, null);
+			gestionAnimal.miseAJourAnimal(chien,"Minono",null);
 			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceChien.Boledogue, null, null).toString(), "Animal [id=Chien-4, Nom refuge = Manomano, nom Animal=Minono, race=Boledogue, age=5mois, sexe=MAXULIN, status=DISPONIBLE]");
 		} catch (ExceptionAnimal e) {
 			e.printStackTrace();

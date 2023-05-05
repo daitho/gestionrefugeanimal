@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAnimal;
-import com.mia.itmf.projet.gestionrefugeanimal.model.Adoption.Status;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.IRace;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.Sexe;
 import com.mia.itmf.projet.gestionrefugeanimal.tools.MapTool;
@@ -63,7 +62,7 @@ public class Refuge {
 	}
 	
 	public boolean miseAJourAnimal(Animal animal) throws ExceptionAnimal {
-		if(!verifierAnimal(animal)) {
+		if(verifierAnimal(animal)) {
 			animal.setRefuge(this);
 			mapAnimal.replace(animal.getKey(), animal);
 			return true;
@@ -71,31 +70,29 @@ public class Refuge {
 		return false;
 	}
 	
-	public boolean miseAJourAnimal(String key, String nom, Integer age, Status status) throws ExceptionAnimal {
-		if(mapAnimal.containsKey(key)) {
-			Animal animal = mapAnimal.get(key);
+	public boolean miseAJourAnimal(Animal animal, String nom, Integer age) throws ExceptionAnimal {
+		if(verifierAnimal(animal)) {
 			if(nom != null) {
 				animal.setNom(nom);
-			}else if(!age.equals(null)) {
+			}else if(age != null) {
 				animal.setAge(age);
-			}else if(status != null)
-			animal.setRefuge(this);
-			//mapAnimal.replace(animal.getKey(), animal);
+			}
 			return true;
 		}
 		return false;
 	}
 	
 	protected boolean verifierAnimal(Animal animal) throws ExceptionAnimal{
-		if(animal != null) {
-			for (Animal resultAnimal : mapAnimal.values()) {
-				if(resultAnimal.getAge() == animal.getAge() && resultAnimal.getNom().equals(animal.getNom()) && resultAnimal.getSexe().equals(animal.getSexe()) && resultAnimal.getStatus().equals(animal.getStatus())) {
-					return true;
-				}
-			}
-		}else {
+		if(animal == null) {
 			throw new ExceptionAnimal("L'animal est null");
 		}
+		
+		for (Animal resultAnimal : mapAnimal.values()) {
+			if(resultAnimal.getAge() == animal.getAge() && resultAnimal.getNom().equals(animal.getNom()) && resultAnimal.getSexe().equals(animal.getSexe()) && resultAnimal.getStatus().equals(animal.getStatus())) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
@@ -109,7 +106,7 @@ public class Refuge {
 //		}
 //		return null;
 //	}
-//	
+	
 	public Animal retrouverUnAnimal(String nom, IRace race, Integer age, Sexe sexe) throws ExceptionAnimal {
 		return MapTool.getMapElement(mapAnimal, Animal.class, false, addElementListAnimaux(nom, race, age, sexe));
 	}
@@ -202,18 +199,6 @@ public class Refuge {
 			System.out.println(employe.toString());
 		}
 	}
-	
-//	public <T> List<String> listerVariables( Class<T> type, String... criteres ) {
-//		var liste = new ArrayList<String>();
-//		
-//		
-//		for(Field field : type.getDeclaredFields()) {
-//			
-//			liste.add(field.getName());
-//		}
-//		
-//		return liste;
-//	}
 	
 	public Employe retrouverUnEmploye(String nom, String prenom, String email) {
 
