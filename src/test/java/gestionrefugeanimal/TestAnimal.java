@@ -40,7 +40,7 @@ public class TestAnimal {
 			gestionAnimal.ajouterAnimal(new Lapin("Milano", RaceLapin.Neo_Zelandais, 4, Sexe.MAXULIN));
 			
 			gestionAnimal.ajouterAnimal(new Chat("Camilou", RaceChat.Asian, 3, Sexe.MAXULIN));
-			gestionAnimal.ajouterAnimal(null);
+			//gestionAnimal.ajouterAnimal(null);
 		} catch (ExceptionAnimal e) {
 			e.printStackTrace();
 		}
@@ -48,7 +48,7 @@ public class TestAnimal {
 	
 	//@Disabled
 	@Test @Order(1)
-	public void test1_afficherAnimal() {
+	public void test11_afficherLapin() {
 		System.out.println(gestionAnimal.toString());
 		gestionAnimal.afficherListeAnimaux();
 		try {
@@ -57,15 +57,15 @@ public class TestAnimal {
 			e.printStackTrace();
 		}
 		assertEquals(gestionAnimal.getNombreAnimal(), 9);
-		gestionAnimal.afficherListeAnimauxParEspece("CHAT");
+		gestionAnimal.afficherListeAnimauxParEspece("LAPIN");
 	}
 	
 	//@Disabled
 	@Test @Order(2)
-	public void test2_ajouterAnimal() {
-		Chat chat = new Chat("Milomilo", RaceChat.Burmese, 5, Sexe.MAXULIN);
+	public void test12_ajouterLapin() {
+		Lapin lapin = new Lapin("Milomilo", RaceLapin.Normand, 5, Sexe.MAXULIN);
 		try {
-			gestionAnimal.ajouterAnimal(chat);
+			gestionAnimal.ajouterAnimal(lapin);
 		} catch (ExceptionAnimal e) {
 			e.printStackTrace();
 		}
@@ -73,11 +73,11 @@ public class TestAnimal {
 	}
 	
 	//@Disabled
-	@Test @Order(2)
-	public void test3_modifierAnimal() {
+	@Test @Order(3)
+	public void test13_modifierLapin() {
 		try {
-			gestionAnimal.miseAJourAnimal("Chat-4","Minono",null,null);
-			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceChat.Burmese, null, null).toString(), "Animal [id=Chat-4, Nom refuge = Manomano, nom Animal=Minono, race=Burmese, age=5mois, sexe=MAXULIN, status=DISPONIBLE]");
+			gestionAnimal.miseAJourAnimal("Lapin-4","Minono",null,null);
+			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceLapin.Normand, null, null).toString(), "Animal [id=Lapin-4, Nom refuge = Manomano, nom Animal=Minono, race=Normand, age=5mois, sexe=MAXULIN, status=DISPONIBLE]");
 		} catch (ExceptionAnimal e) {
 			e.printStackTrace();
 		 }
@@ -85,8 +85,55 @@ public class TestAnimal {
 	}
 	
 	//@Disabled
+	@Test @Order(4)
+	public void test14_supprimererLapin() {
+		try {
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceChat.Burmese, 5, null));
+		} catch (ExceptionAnimal e) {
+				e.printStackTrace();
+		}
+		assertEquals(gestionAnimal.getNombreAnimal(), 9);
+	}
+	
+	//@Disabled
+	@Test @Order(1)
+	public void test21_afficherChien() {
+		try {
+			assertEquals(gestionAnimal.retrouverUnAnimal("Charline", null, null, Sexe.FEMININ).toString(),"Animal [id=Chien-3, Nom refuge = Manomano, nom Animal=Charline, race=Boledogue, age=4mois, sexe=FEMININ, status=DISPONIBLE]");
+		} catch (ExceptionAnimal e) {
+			e.printStackTrace();
+		}
+		assertEquals(gestionAnimal.getNombreAnimal(), 9);
+		gestionAnimal.afficherListeAnimauxParEspece("CHIEN");
+	}
+	
+	//@Disabled
 	@Test @Order(2)
-	public void test3_supprimererAnimal() {
+	public void test22_ajouterChien() {
+		Chien chien = new Chien("Milomilo", RaceChien.Boledogue, 5, Sexe.MAXULIN);
+		try {
+			gestionAnimal.ajouterAnimal(chien);
+		} catch (ExceptionAnimal e) {
+			e.printStackTrace();
+		}
+		assertEquals(gestionAnimal.getNombreAnimal(), 10);
+	}
+	
+	//@Disabled
+	@Test @Order(3)
+	public void test23_modifierChien() {
+		try {
+			gestionAnimal.miseAJourAnimal("Chien-4","Minono",null,null);
+			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceChien.Boledogue, null, null).toString(), "Animal [id=Chien-4, Nom refuge = Manomano, nom Animal=Minono, race=Boledogue, age=5mois, sexe=MAXULIN, status=DISPONIBLE]");
+		} catch (ExceptionAnimal e) {
+			e.printStackTrace();
+		 }
+		assertEquals(gestionAnimal.getNombreAnimal(), 10);
+	}
+	
+	//@Disabled
+	@Test @Order(4)
+	public void test24_supprimererChien() {
 		try {
 			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceChat.Burmese, 5, null));
 		} catch (ExceptionAnimal e) {
