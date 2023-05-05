@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAnimal;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Adoption.Status;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.IRace;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.Sexe;
 import com.mia.itmf.projet.gestionrefugeanimal.tools.MapTool;
 
@@ -43,6 +45,14 @@ public class Refuge {
 		return false;
 	}
 	
+	public boolean supprimerAnimal(String key) throws ExceptionAnimal{
+		if(mapAnimal.containsKey(key)) {
+			mapAnimal.remove(key);
+			return true;
+		}
+		return false;
+	}
+	
 	public boolean supprimerAnimal(Animal animal) throws ExceptionAnimal{
 		if(verifierAnimal(animal)) {
 			mapAnimal.remove(animal.getKey());
@@ -52,10 +62,25 @@ public class Refuge {
 		return false;
 	}
 	
-	public boolean miseAJourAnimal(Animal animal) throws Exception {
+	public boolean miseAJourAnimal(Animal animal) throws ExceptionAnimal {
 		if(!verifierAnimal(animal)) {
 			animal.setRefuge(this);
 			mapAnimal.replace(animal.getKey(), animal);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean miseAJourAnimal(String key, String nom, Integer age, Status status) throws ExceptionAnimal {
+		if(mapAnimal.containsKey(key)) {
+			Animal animal = mapAnimal.get(key);
+			if(nom != null) {
+				animal.setNom(nom);
+			}else if(!age.equals(null)) {
+				animal.setAge(age);
+			}else if(status != null)
+			animal.setRefuge(this);
+			//mapAnimal.replace(animal.getKey(), animal);
 			return true;
 		}
 		return false;
@@ -85,16 +110,16 @@ public class Refuge {
 //		return null;
 //	}
 //	
-	public Animal retrouverUnAnimal(String nom, Integer age, Sexe sexe) throws ExceptionAnimal {
-		return MapTool.getMapElement(mapAnimal, Animal.class, false, addElementListAnimaux(nom, age, sexe));
+	public Animal retrouverUnAnimal(String nom, IRace race, Integer age, Sexe sexe) throws ExceptionAnimal {
+		return MapTool.getMapElement(mapAnimal, Animal.class, false, addElementListAnimaux(nom, race, age, sexe));
 	}
 	
-	public List<Animal> retrouverAnimaux(String nom, Integer age, Sexe sexe) throws ExceptionAnimal {
-		return MapTool.getMapElements(mapAnimal, true, addElementListAnimaux(nom, age, sexe));
+	public List<Animal> retrouverAnimaux(String nom, IRace race, Integer age, Sexe sexe) throws ExceptionAnimal {
+		return MapTool.getMapElements(mapAnimal, true, addElementListAnimaux(nom, race, age, sexe));
 	}
 	
-	private List<MapTool.SearchCriteria<Animal>> addElementListAnimaux(String nom, Integer age, Sexe sexe) throws ExceptionAnimal{
-		if(nom==null && age==null && sexe==null) {
+	private List<MapTool.SearchCriteria<Animal>> addElementListAnimaux(String nom, IRace race, Integer age, Sexe sexe) throws ExceptionAnimal{
+		if(nom==null && age==null && sexe==null && race == null) {
 			throw new ExceptionAnimal("La recherche dois contenir au moins une valeur");
 		}
 		List<MapTool.SearchCriteria<Animal>> criteriaList = new ArrayList<>();
@@ -104,23 +129,21 @@ public class Refuge {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getSexe, sexe));
 		}else if(age != null && age >= 0) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getAge, age));
+		}else if(race != null){
+			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getRace, race));
 		}
 		
 		return criteriaList;
 	}
 	
-//	public int getNombreEspeceAnimal(String nomEspece) {
-//		int count = 0;
-//		for(Map.Entry<String, Animal> keyValue : mapAnimal.entrySet()) {
-//			if(keyValue.getValue().getClass().getSimpleName().equals(nomEspece)) {
-//				count++;
-//			}
-//		}
-//		return count;
-//	}
+	public void afficherListeAnimaux() {
+		for(Animal animal : mapAnimal.values()) {
+			System.out.println(animal.toString());
+		}
+	}
 	
 	
-	public void afficherListeAnimalParEspece(String nomEspece) {
+	public void afficherListeAnimauxParEspece(String nomEspece) {
 		System.out.println(nomEspece);
 		for(Map.Entry<String, Animal> keyValue : mapAnimal.entrySet()) {
 			if(keyValue.getValue().getClass().getSimpleName().toUpperCase().contains(nomEspece.toUpperCase())) {

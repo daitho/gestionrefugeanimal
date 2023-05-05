@@ -1,18 +1,24 @@
 package gestionrefugeanimal;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAnimal;
-import com.mia.itmf.projet.gestionrefugeanimal.model.Adoptant;
-import com.mia.itmf.projet.gestionrefugeanimal.model.Chat;
-import com.mia.itmf.projet.gestionrefugeanimal.model.Chien;
-import com.mia.itmf.projet.gestionrefugeanimal.model.Lapin;
-import com.mia.itmf.projet.gestionrefugeanimal.model.Refuge;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.Sexe;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Chat;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Chat.RaceChat;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Chien;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Chien.RaceChien;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Lapin;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Lapin.RaceLapin;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Refuge;
 
+@TestMethodOrder(MethodOrderer.MethodName.class )
 public class TestAnimal {
 
 	private static Refuge gestionAnimal = new Refuge("Manomano","Nantes");
@@ -39,5 +45,55 @@ public class TestAnimal {
 			e.printStackTrace();
 		}
 	}
+	
+	//@Disabled
+	@Test @Order(1)
+	public void test1_afficherAnimal() {
+		System.out.println(gestionAnimal.toString());
+		gestionAnimal.afficherListeAnimaux();
+		try {
+			assertEquals(gestionAnimal.retrouverUnAnimal("Milano", null, null, Sexe.MAXULIN).toString(),"Animal [id=Lapin-3, Nom refuge = Manomano, nom Animal=Milano, race=Neo_Zelandais, age=4mois, sexe=MAXULIN, status=DISPONIBLE]");
+		} catch (ExceptionAnimal e) {
+			e.printStackTrace();
+		}
+		assertEquals(gestionAnimal.getNombreAnimal(), 9);
+		gestionAnimal.afficherListeAnimauxParEspece("CHAT");
+	}
+	
+	//@Disabled
+	@Test @Order(2)
+	public void test2_ajouterAnimal() {
+		Chat chat = new Chat("Milomilo", RaceChat.Burmese, 5, Sexe.MAXULIN);
+		try {
+			gestionAnimal.ajouterAnimal(chat);
+		} catch (ExceptionAnimal e) {
+			e.printStackTrace();
+		}
+		assertEquals(gestionAnimal.getNombreAnimal(), 10);
+	}
+	
+	//@Disabled
+	@Test @Order(2)
+	public void test3_modifierAnimal() {
+		try {
+			gestionAnimal.miseAJourAnimal("Chat-4","Minono",null,null);
+			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceChat.Burmese, null, null).toString(), "Animal [id=Chat-4, Nom refuge = Manomano, nom Animal=Minono, race=Burmese, age=5mois, sexe=MAXULIN, status=DISPONIBLE]");
+		} catch (ExceptionAnimal e) {
+			e.printStackTrace();
+		 }
+		assertEquals(gestionAnimal.getNombreAnimal(), 10);
+	}
+	
+	//@Disabled
+	@Test @Order(2)
+	public void test3_supprimererAnimal() {
+		try {
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceChat.Burmese, 5, null));
+		} catch (ExceptionAnimal e) {
+				e.printStackTrace();
+		}
+		assertEquals(gestionAnimal.getNombreAnimal(), 9);
+	}
+	
 
 }

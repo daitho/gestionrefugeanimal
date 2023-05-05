@@ -65,7 +65,7 @@ public class TestAdoption {
 		System.out.println(refuge.toString());
 		assertEquals(refuge.toString(),"Refuge [id=0, nom=Manomano, localisation=Nantes, nombreAnimal=9]");
 		assertEquals(refuge.getNombreAnimal(), 9);
-		refuge.afficherListeAnimalParEspece("CHAT");
+		refuge.afficherListeAnimauxParEspece("CHAT");
 	}
 	
 	@Test @Order(2)
@@ -77,7 +77,7 @@ public class TestAdoption {
 		Adoptant adoptant2 = listesAdoptant.get(1);
 		Animal animal1 = null;
 		try {
-			animal1 = refuge.retrouverUnAnimal("Mimi", null, null);
+			animal1 = refuge.retrouverUnAnimal("Mimi", null, null, null);
 		} catch (ExceptionAnimal e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -106,7 +106,7 @@ public class TestAdoption {
 	public void test3_accepterAdoption(){
 		Animal animal1=null;
 		try {
-			animal1 = refuge.retrouverUnAnimal("Mimi", 6, Sexe.FEMININ);
+			animal1 = refuge.retrouverUnAnimal("Mimi", null, 6, Sexe.FEMININ);
 		} catch (ExceptionAnimal e1) {
 			e1.printStackTrace();
 		}
@@ -125,7 +125,7 @@ public class TestAdoption {
 		}
 		
 		System.out.println();
-		refuge.afficherListeAnimalParEspece("LAPIN");
+		refuge.afficherListeAnimauxParEspece("LAPIN");
 	}
 	
 	@Test @Order(4)
@@ -137,7 +137,7 @@ public class TestAdoption {
 		}
 		assertEquals(refuge.getNombreAnimal(), 10);
 		System.out.println();
-		refuge.afficherListeAnimalParEspece("LAPIN");
+		refuge.afficherListeAnimauxParEspece("LAPIN");
 	}
 	
 	@Test @Order(5)
