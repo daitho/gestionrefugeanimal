@@ -27,7 +27,7 @@ import com.mia.itmf.projet.gestionrefugeanimal.model.Lapin.RaceLapin;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Refuge;
 
 @TestMethodOrder(MethodOrderer.MethodName.class )
-public class TestRefuge {
+public class TestAdoption {
 	private static Refuge refuge = new Refuge("Manomano","Nantes");
 	private static GestionAdoption gestionAdoption = new GestionAdoption();
 	private static List<Adoptant> listesAdoptant = new ArrayList<>();

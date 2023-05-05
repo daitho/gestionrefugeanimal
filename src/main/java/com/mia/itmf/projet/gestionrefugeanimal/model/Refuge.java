@@ -86,7 +86,6 @@ public class Refuge {
 //	}
 //	
 	public Animal retrouverUnAnimal(String nom, Integer age, Sexe sexe) throws ExceptionAnimal {
-
 		return MapTool.getMapElement(mapAnimal, Animal.class, false, addElementListAnimaux(nom, age, sexe));
 	}
 	
