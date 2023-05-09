@@ -54,7 +54,7 @@ public class TestAdoption {
 			refuge.ajouterAnimal(new Chat("Camilou", RaceChat.Asian, 3, Sexe.MAXULIN));
 			refuge.ajouterAnimal(null);
 		} catch (ExceptionAnimal e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		
 		//Employe
@@ -81,9 +81,8 @@ public class TestAdoption {
 		Animal animal1 = null;
 		try {
 			animal1 = refuge.retrouverUnAnimal("Mimi", null, null, null);
-		} catch (ExceptionAnimal e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		} catch (ExceptionAnimal e) {
+			System.err.println(e.getMessage());
 		}
 		
 		System.out.println(adoptant2.toString());
@@ -91,15 +90,14 @@ public class TestAdoption {
 			gestionAdoption.demanderAdoption(adoptant1, animal1);
 			gestionAdoption.demanderAdoption(adoptant2, animal1);
 		} catch (ExceptionAdoption e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		
 		try {
 			assertEquals(gestionAdoption.retrouverAdoption(adoptant1, animal1).getStatus().toString(), "ATTENTE");
 			assertEquals(gestionAdoption.retrouverAdoption(adoptant2, animal1).getStatus().toString(), "ATTENTE");
 		} catch (ExceptionAdoption e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		
 	}
@@ -110,8 +108,8 @@ public class TestAdoption {
 		Animal animal1=null;
 		try {
 			animal1 = refuge.retrouverUnAnimal("Mimi", null, 6, Sexe.FEMININ);
-		} catch (ExceptionAnimal e1) {
-			e1.printStackTrace();
+		} catch (ExceptionAnimal e) {
+			System.err.println(e.getMessage());
 		}
 		Adoptant adoptant1 = listesAdoptant.get(0);
 		Adoptant adoptant2 = listesAdoptant.get(1);
@@ -124,7 +122,7 @@ public class TestAdoption {
 			gestionAdoption.accepterDemandeAdoption(gestionAdoption.retrouverAdoption(adoptant2,animal1));
 			assertEquals(gestionAdoption.retrouverAdoption(adoptant2, animal1).getStatus().toString(), "REJETE");
 		} catch (ExceptionAdoption e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		
 		System.out.println();
@@ -136,7 +134,7 @@ public class TestAdoption {
 		try {
 			refuge.ajouterAnimal(new Lapin("Mimi", RaceLapin.Alaska, 6, Sexe.FEMININ));
 		} catch (ExceptionAnimal e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		assertEquals(refuge.getNombreAnimal(), 10);
 		System.out.println();
@@ -172,8 +170,7 @@ public class TestAdoption {
 			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Milano", RaceLapin.Neo_Zelandais, 4, null));
 			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Camilou", RaceChat.Asian, 3, null));
 		} catch (ExceptionAnimal e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		System.out.println("Animaux supprimés !" );
 	}
