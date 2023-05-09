@@ -9,6 +9,7 @@ import java.util.TreeMap;
 import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAnimal;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.IRace;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.Sexe;
+import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.StatusAnimal;
 import com.mia.itmf.projet.gestionrefugeanimal.tools.MapTool;
 
 public class Refuge {
@@ -70,12 +71,16 @@ public class Refuge {
 		return false;
 	}
 	
-	public boolean miseAJourAnimal(Animal animal, String nom, Integer age) throws ExceptionAnimal {
+	public boolean miseAJourAnimal(Animal animal, String nom, Integer age, StatusAnimal status) throws ExceptionAnimal {
 		if(verifierAnimal(animal)) {
 			if(nom != null) {
 				animal.setNom(nom);
-			}else if(age != null) {
+			}
+			if(age != null && age >= 0) {
 				animal.setAge(age);
+			}
+			if(status != null){
+				animal.setStatus(status);
 			}
 			return true;
 		}

@@ -78,8 +78,8 @@ public class TestAnimal {
 	public void test13_modifierLapin() {
 		try {
 			Lapin lapin = (Lapin) gestionAnimal.retrouverUnAnimal("Milomilo", RaceLapin.Normand, null,null);
-			gestionAnimal.miseAJourAnimal(lapin,"Minono",null);
-			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceLapin.Normand, null, null).toString(), "Animal [id=Lapin-4, Nom refuge = Manomano, nom Animal=Minono, race=Normand, age=5mois, sexe=MAXULIN, status=DISPONIBLE]");
+			gestionAnimal.miseAJourAnimal(lapin,"Minono",6, null);
+			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceLapin.Normand, null, null).toString(), "Animal [id=Lapin-4, Nom refuge = Manomano, nom Animal=Minono, race=Normand, age=6mois, sexe=MAXULIN, status=DISPONIBLE]");
 		} catch (ExceptionAnimal e) {
 			e.printStackTrace();
 		 }
@@ -126,7 +126,7 @@ public class TestAnimal {
 	public void test23_modifierChien() {
 		try {
 			Chien chien = (Chien) gestionAnimal.retrouverUnAnimal("Milomilo", null, 5, null);
-			gestionAnimal.miseAJourAnimal(chien,"Minono",null);
+			gestionAnimal.miseAJourAnimal(chien,"Minono",null, null);
 			assertEquals(gestionAnimal.retrouverUnAnimal("Minono", RaceChien.Boledogue, null, null).toString(), "Animal [id=Chien-4, Nom refuge = Manomano, nom Animal=Minono, race=Boledogue, age=5mois, sexe=MAXULIN, status=DISPONIBLE]");
 		} catch (ExceptionAnimal e) {
 			e.printStackTrace();

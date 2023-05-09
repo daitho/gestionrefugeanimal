@@ -48,7 +48,7 @@ public abstract class Animal {
 	}
 
 
-	public Integer getAge() {
+	public int getAge() {
 		return age;
 	}
 

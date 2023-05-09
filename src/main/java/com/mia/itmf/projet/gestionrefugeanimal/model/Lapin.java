@@ -9,7 +9,7 @@ public class Lapin extends Animal {
 		this.key = "Lapin-"+ COUNT++;
 	}
 
-	public Lapin(String nom, IRace race, int age, Sexe sexe) {
+	public Lapin(String nom, IRace race, Integer age, Sexe sexe) {
 		super(nom, race, age, sexe);
 		this.key = "Lapin-"+ COUNT++;
 	}
