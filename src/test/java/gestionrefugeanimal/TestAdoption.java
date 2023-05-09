@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -156,6 +157,25 @@ public class TestAdoption {
 //		System.out.println();
 //		refuge.retrouverAdoptionParAdoptant("Jean");
 //	}
+	
+	@AfterAll
+	public static void supprimerTousLesAnimauxDeTest() {
+		try {
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Chouchou", RaceChien.Caniche, 5, null));
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Pipi", RaceChien.Cocker, 2, null));
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Charline", RaceChien.Boledogue, 4, null));
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Chalotte", RaceChat.Abyssin, 2, null));
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Jiff", RaceChat.Anatoli, 5, null));
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Mimi", RaceLapin.Alaska, 6, null));
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Memo", RaceLapin.Lynx, 4, null));
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Milano", RaceLapin.Neo_Zelandais, 4, null));
+			refuge.supprimerAnimal(refuge.retrouverUnAnimal("Camilou", RaceChat.Asian, 3, null));
+		} catch (ExceptionAnimal e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Animaux supprimés !" );
+	}
 	
 	
 }

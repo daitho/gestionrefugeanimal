@@ -2,6 +2,7 @@ package gestionrefugeanimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -41,6 +42,8 @@ public class TestAnimal {
 			gestionAnimal.ajouterAnimal(new Lapin("Milano", RaceLapin.Neo_Zelandais, 4, Sexe.MAXULIN));
 			
 			gestionAnimal.ajouterAnimal(new Chat("Camilou", RaceChat.Asian, 3, Sexe.MAXULIN));
+
+			
 			//gestionAnimal.ajouterAnimal(null);
 		} catch (ExceptionAnimal e) {
 			e.printStackTrace();
@@ -90,7 +93,7 @@ public class TestAnimal {
 	@Test @Order(4)
 	public void test14_supprimererLapin() {
 		try {
-			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceLapin.Normand, 5, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceLapin.Normand, 6, null));
 		} catch (ExceptionAnimal e) {
 				e.printStackTrace();
 		}
@@ -138,11 +141,30 @@ public class TestAnimal {
 	@Test @Order(4)
 	public void test24_supprimererChien() {
 		try {
-			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceChat.Burmese, 5, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Minono", RaceChien.Boledogue, 5, null));
 		} catch (ExceptionAnimal e) {
 				e.printStackTrace();
 		}
 		assertEquals(gestionAnimal.getNombreAnimal(), 9);
+	}
+	
+	@AfterAll
+	public static void supprimerTousLesAnimauxDeTest() {
+		try {
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Chouchou", RaceChien.Caniche, 5, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Pipi", RaceChien.Cocker, 2, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Charline", RaceChien.Boledogue, 4, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Chalotte", RaceChat.Abyssin, 2, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Jiff", RaceChat.Anatoli, 5, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Mimi", RaceLapin.Alaska, 6, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Memo", RaceLapin.Lynx, 4, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Milano", RaceLapin.Neo_Zelandais, 4, null));
+			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Camilou", RaceChat.Asian, 3, null));
+		} catch (ExceptionAnimal e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("Animaux supprimés !" );
 	}
 	
 

@@ -9,7 +9,7 @@ public class Chat extends Animal {
 		this.key = "Chat-"+ COUNT++;
 	}
 
-	public Chat(String nom, IRace race, int age, Sexe sexe) {
+	public Chat(String nom, IRace race, Integer age, Sexe sexe) {
 		super(nom, race, age, sexe);
 		this.key = "Chat-"+ COUNT++;
 	}

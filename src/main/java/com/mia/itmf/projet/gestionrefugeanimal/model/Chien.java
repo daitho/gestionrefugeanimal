@@ -10,7 +10,7 @@ public class Chien extends Animal {
 		this.key = "Chien-"+ COUNT++;
 	}
 
-	public Chien(String nom, IRace race, int age, Sexe sexe) {
+	public Chien(String nom, IRace race, Integer age, Sexe sexe) {
 		super(nom, race, age, sexe);
 		this.key = "Chien-"+ COUNT++;
 	}

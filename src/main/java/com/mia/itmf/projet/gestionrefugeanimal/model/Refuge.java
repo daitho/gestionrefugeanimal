@@ -124,14 +124,18 @@ public class Refuge {
 		if(nom==null && age==null && sexe==null && race == null) {
 			throw new ExceptionAnimal("La recherche dois contenir au moins une valeur");
 		}
+		
 		List<MapTool.SearchCriteria<Animal>> criteriaList = new ArrayList<>();
 		if(nom != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getNom, nom));
-		}else if(sexe != null) {
+		}
+		if(sexe != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getSexe, sexe));
-		}else if(age != null && age >= 0) {
+		}
+		if(age != null && age >= 0) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getAge, age));
-		}else if(race != null){
+		}
+		if(race != null){
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getRace, race));
 		}
 		
