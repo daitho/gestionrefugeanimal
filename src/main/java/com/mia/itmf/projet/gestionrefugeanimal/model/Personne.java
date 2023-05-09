@@ -30,7 +30,7 @@ public abstract class Personne {
 	}
 
 
-	public void setNom(String nom) {
+	protected void setNom(String nom) {
 		this.nom = nom;
 	}
 
@@ -40,7 +40,7 @@ public abstract class Personne {
 	}
 
 
-	public void setPrenom(String prenom) {
+	protected void setPrenom(String prenom) {
 		this.prenom = prenom;
 	}
 
@@ -50,7 +50,7 @@ public abstract class Personne {
 	}
 
 
-	public void setEmail(String email) {
+	protected void setEmail(String email) {
 		this.email = email;
 	}
 
@@ -60,7 +60,7 @@ public abstract class Personne {
 	}
 
 
-	public void setTelephone(String telephone) {
+	protected void setTelephone(String telephone) {
 		this.telephone = telephone;
 	}
 
@@ -70,7 +70,7 @@ public abstract class Personne {
 	}
 
 
-	public void setAdresse(String adresse) {
+	protected void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
 

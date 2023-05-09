@@ -20,7 +20,7 @@ public class Refuge {
 	private String localisation;
 	private Map<String, Animal> mapAnimal = new LinkedHashMap<String, Animal>();
 	private Map<String, Employe> mapEmploye = new TreeMap<String, Employe>();
-	
+
 	public Refuge() {
 		this.id = COUNT++;
 	}
@@ -30,10 +30,11 @@ public class Refuge {
 		this.nom = nom;
 		this.localisation = localisation;
 	}
-	
-	//Partie animal-----------------------------------------------------------------------------------
+
+	// Partie
+	// animal-----------------------------------------------------------------------------------
 	public boolean ajouterAnimal(Animal animal) throws ExceptionAnimal {
-		if(!verifierAnimal(animal)) {
+		if (!verifierAnimal(animal)) {
 			try {
 				animal.setRefuge(this);
 				mapAnimal.put(animal.getKey(), animal);
@@ -42,66 +43,68 @@ public class Refuge {
 				e.printStackTrace();
 			}
 		}
-		
+
 		return false;
 	}
-	
-	public boolean supprimerAnimal(String key) throws ExceptionAnimal{
-		if(mapAnimal.containsKey(key)) {
+
+	public boolean supprimerAnimal(String key) throws ExceptionAnimal {
+		if (mapAnimal.containsKey(key)) {
 			mapAnimal.remove(key);
 			return true;
 		}
 		return false;
 	}
-	
-	public boolean supprimerAnimal(Animal animal) throws ExceptionAnimal{
-		if(verifierAnimal(animal)) {
+
+	public boolean supprimerAnimal(Animal animal) throws ExceptionAnimal {
+		if (verifierAnimal(animal)) {
 			mapAnimal.remove(animal.getKey());
 
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean miseAJourAnimal(Animal animal) throws ExceptionAnimal {
-		if(verifierAnimal(animal)) {
+		if (verifierAnimal(animal)) {
 			animal.setRefuge(this);
 			mapAnimal.replace(animal.getKey(), animal);
 			return true;
 		}
 		return false;
 	}
-	
+
 	public boolean miseAJourAnimal(Animal animal, String nom, Integer age, StatusAnimal status) throws ExceptionAnimal {
-		if(verifierAnimal(animal)) {
-			if(nom != null) {
+		if (verifierAnimal(animal)) {
+			if (nom != null) {
 				animal.setNom(nom);
 			}
-			if(age != null && age >= 0) {
+			if (age != null && age >= 0) {
 				animal.setAge(age);
 			}
-			if(status != null){
+			if (status != null) {
 				animal.setStatus(status);
 			}
 			return true;
 		}
 		return false;
 	}
-	
-	protected boolean verifierAnimal(Animal animal) throws ExceptionAnimal{
-		if(animal == null) {
+
+	protected boolean verifierAnimal(Animal animal) throws ExceptionAnimal {
+		if (animal == null) {
 			throw new ExceptionAnimal("L'animal est null");
 		}
-		
+
 		for (Animal resultAnimal : mapAnimal.values()) {
-			if(resultAnimal.getAge() == animal.getAge() && resultAnimal.getNom().equals(animal.getNom()) && resultAnimal.getSexe().equals(animal.getSexe()) && resultAnimal.getStatus().equals(animal.getStatus())) {
+			if (resultAnimal.getAge() == animal.getAge() && resultAnimal.getNom().equals(animal.getNom())
+					&& resultAnimal.getSexe().equals(animal.getSexe())
+					&& resultAnimal.getStatus().equals(animal.getStatus())) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 //	protected boolean verifierAnimal(String key) {
 //		return mapAnimal.containsKey(key);
 //	}
@@ -112,166 +115,175 @@ public class Refuge {
 //		}
 //		return null;
 //	}
-	
+
 	public Animal retrouverUnAnimal(String nom, IRace race, Integer age, Sexe sexe) throws ExceptionAnimal {
 		return MapTool.getMapElement(mapAnimal, Animal.class, false, addElementListAnimaux(nom, race, age, sexe));
 	}
-	
+
 	public List<Animal> retrouverAnimaux(String nom, IRace race, Integer age, Sexe sexe) throws ExceptionAnimal {
 		return MapTool.getMapElements(mapAnimal, true, addElementListAnimaux(nom, race, age, sexe));
 	}
-	
-	private List<MapTool.SearchCriteria<Animal>> addElementListAnimaux(String nom, IRace race, Integer age, Sexe sexe) throws ExceptionAnimal{
-		if(nom==null && age==null && sexe==null && race == null) {
+
+	private List<MapTool.SearchCriteria<Animal>> addElementListAnimaux(String nom, IRace race, Integer age, Sexe sexe)
+			throws ExceptionAnimal {
+		if (nom == null && age == null && sexe == null && race == null) {
 			throw new ExceptionAnimal("La recherche dois contenir au moins une valeur");
 		}
-		
+
 		List<MapTool.SearchCriteria<Animal>> criteriaList = new ArrayList<>();
-		if(nom != null) {
+		if (nom != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getNom, nom));
 		}
-		if(sexe != null) {
+		if (sexe != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getSexe, sexe));
 		}
-		if(age != null && age >= 0) {
+		if (age != null && age >= 0) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getAge, age));
 		}
-		if(race != null){
+		if (race != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Animal::getRace, race));
 		}
-		
+
 		return criteriaList;
 	}
-	
+
 	public void afficherListeAnimaux() {
-		for(Animal animal : mapAnimal.values()) {
+		for (Animal animal : mapAnimal.values()) {
 			System.out.println(animal.toString());
 		}
 	}
-	
-	
+
 	public void afficherListeAnimauxParEspece(String nomEspece) {
 		System.out.println(nomEspece);
-		for(Map.Entry<String, Animal> keyValue : mapAnimal.entrySet()) {
-			if(keyValue.getValue().getClass().getSimpleName().toUpperCase().contains(nomEspece.toUpperCase())) {
+		for (Map.Entry<String, Animal> keyValue : mapAnimal.entrySet()) {
+			if (keyValue.getValue().getClass().getSimpleName().toUpperCase().contains(nomEspece.toUpperCase())) {
 				System.out.println(keyValue.getValue().toString());
 			}
 		}
 	}
-	
-	//Partie employe--------------------------------------------------------------------
+
+	// Partie
+	// employe--------------------------------------------------------------------
 	protected boolean verifierEmploye(Employe employe) throws ExceptionEmploye {
-		if(employe == null) {
+		if (employe == null) {
 			throw new ExceptionEmploye("L'employe est null");
 		}
-		
+
 		for (Employe resultEmploye : mapEmploye.values()) {
-			if(resultEmploye.getNom().equals(employe.getNom()) && resultEmploye.getPrenom().equals(employe.getPrenom()) && resultEmploye.getEmail().equals(employe.getEmail()) && resultEmploye.getTelephone().equals(employe.getTelephone()) && resultEmploye.getAdresse().equals(employe.getAdresse())) {
+			if (resultEmploye.getNom().equals(employe.getNom()) && resultEmploye.getPrenom().equals(employe.getPrenom())
+					&& resultEmploye.getEmail().equals(employe.getEmail())
+					&& resultEmploye.getTelephone().equals(employe.getTelephone())
+					&& resultEmploye.getAdresse().equals(employe.getAdresse())) {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
-	
+
 	protected boolean verifierEmploye(String key) {
 		return mapEmploye.containsKey(key);
 	}
-	
+
 	public boolean ajouterEmploye(Employe employe) throws ExceptionEmploye {
-		if(!verifierEmploye(employe)) {
-			try {
-				mapEmploye.put(employe.getKey(), employe);
-				return true;
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+
+		
+		if (!verifierEmploye(employe)) {
+			mapEmploye.put(employe.getKey(), employe);
+			return true;
 		}
-		return false;
+
+		throw new ExceptionEmploye("Employé incorrect");
+
 	}
-	
+
 	public boolean supprimerEmploye(Employe employe) throws ExceptionEmploye {
-		if(verifierEmploye(employe)) {
+		if (verifierEmploye(employe)) {
 			return mapEmploye.remove(employe.getKey(), employe);
 		}
 		return false;
 	}
-	
+
 	public boolean miseAJourEmploye(Employe employe) throws ExceptionEmploye {
-		if(verifierEmploye(employe)) {
+		if (verifierEmploye(employe)) {
 			mapEmploye.replace(employe.getKey(), employe);
 			return true;
 		}
 		return false;
 	}
-	
-	public boolean miseAJourEmploye(Employe employe, String nom, String prenom, String email, String tel, String adresse) throws ExceptionEmploye {
-		if(verifierEmploye(employe)) {
-			if(nom != null) {
+
+	public boolean miseAJourEmploye(Employe employe, String nom, String prenom, String email, String tel,
+			String adresse) throws ExceptionEmploye {
+		if (verifierEmploye(employe)) {
+			if (nom != null) {
 				employe.setNom(nom);
 			}
-			if(prenom != null) {
+			if (prenom != null) {
 				employe.setPrenom(prenom);
 			}
-			if(email != null) {
+			if (email != null) {
 				employe.setEmail(email);
 			}
-			if(tel != null) {
+			if (tel != null) {
 				employe.setEmail(email);
 			}
-			if(adresse != null) {
+			if (adresse != null) {
 				employe.setAdresse(adresse);
 			}
-			
+
 			return true;
 		}
 		return false;
 	}
-	
+
 	public int getNombreEmploye() {
 		return mapEmploye.size();
 	}
-	
+
 	public void consulterListeEmployes() {
-		for(Employe employe : mapEmploye.values()) {
+		for (Employe employe : mapEmploye.values()) {
 			System.out.println(employe.toString());
 		}
 	}
-	
-	public Employe retrouverUnEmploye(String nom, String prenom, String email, String tel, String adresse) throws ExceptionEmploye {
 
-		return MapTool.getMapElement(mapEmploye, Employe.class, false, addElementListEmployer(nom, prenom, email, tel, adresse));
+	public Employe retrouverUnEmploye(String nom, String prenom, String email, String tel, String adresse)
+			throws ExceptionEmploye {
+
+		return MapTool.getMapElement(mapEmploye, Employe.class, false,
+				addElementListEmployer(nom, prenom, email, tel, adresse));
 	}
-	
-	public List<Employe> retrouverEmploye(String nom,String prenom, String email, String tel, String adresse, boolean unique) throws ExceptionEmploye {
+
+	public List<Employe> retrouverEmploye(String nom, String prenom, String email, String tel, String adresse,
+			boolean unique) throws ExceptionEmploye {
 		return MapTool.getMapElements(mapEmploye, unique, addElementListEmployer(nom, prenom, email, tel, adresse));
 	}
-	
-	private List<MapTool.SearchCriteria<Employe>> addElementListEmployer(String nom, String prenom, String email, String tel, String adresse) throws ExceptionEmploye{
+
+	private List<MapTool.SearchCriteria<Employe>> addElementListEmployer(String nom, String prenom, String email,
+			String tel, String adresse) throws ExceptionEmploye {
 		List<MapTool.SearchCriteria<Employe>> criteriaList = new ArrayList<>();
-		
-		if(nom == null && prenom==null && email==null && tel==null && adresse==null) {
+
+		if (nom == null && prenom == null && email == null && tel == null && adresse == null) {
 			throw new ExceptionEmploye("Aucun attribut de employé n'est inséré !");
 		}
-		
-		if(nom!=null) {
+
+		if (nom != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getNom, nom));
 		}
-		if(prenom != null) {
+		if (prenom != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getPrenom, prenom));
 		}
-		if(email!=null) {
+		if (email != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getEmail, email));
 		}
-		if(tel!=null) {
+		if (tel != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getTelephone, tel));
 		}
-		if(adresse!=null) {
+		if (adresse != null) {
 			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getAdresse, adresse));
 		}
 		return criteriaList;
 	}
-	
+
 //	public Personne retrouverPersonne(String... criteres) {
 //		Generique generique = new Generique();
 ////		if(verifierPersonne(key)) {
@@ -293,7 +305,8 @@ public class Refuge {
 //	    return (Adoptant) retrouverPersonne(key);
 //    }
 
-	//Getter et setter--------------------------------------------------------------------
+	// Getter et
+	// setter--------------------------------------------------------------------
 	public int getId() {
 		return this.id;
 	}
@@ -305,6 +318,7 @@ public class Refuge {
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
+
 	public String getLocalisation() {
 		return localisation;
 	}
@@ -317,13 +331,12 @@ public class Refuge {
 		return mapAnimal.size();
 	}
 
-
 	@Override
 	public String toString() {
-		return "Refuge [id=" + getId() +", nom=" + getNom() + ", localisation=" + getLocalisation() + ", nombreAnimal=" + getNombreAnimal()+ "]";
+		return "Refuge [id=" + getId() + ", nom=" + getNom() + ", localisation=" + getLocalisation() + ", nombreAnimal="
+				+ getNombreAnimal() + "]";
 	}
-	
-	
+
 //	public Employe retrouverEmploye(String key) {
 //	Employe result = null;
 //	for(Employe employe : listeEmploye()) {
@@ -364,6 +377,5 @@ public class Refuge {
 //	}
 //	return liste;
 //}
-	
 
 }

@@ -150,19 +150,13 @@ public class TestAdoption {
 			refuge.ajouterEmploye(new Employe("Paul", "Martin", "pajean@gmail.com", "0455655677", "Bordeaux"));
 			refuge.ajouterEmploye(null);
 		} catch (ExceptionEmploye e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 		refuge.consulterListeEmployes();
-		assertEquals(refuge.getNombreEmploye(), 2);
+		assertEquals(1, refuge.getNombreEmploye());
 	}
 	                                                                                                                                                                                                                                                                                                                                                                                
-//	@Test @Order(6)
-//	public void test6_listeDemande() throws Exception {
-//		refuge.listeDemande();
-//		System.out.println();
-//		refuge.retrouverAdoptionParAdoptant("Jean");
-//	}
+
 	
 	@AfterAll
 	public static void supprimerTousLesAnimauxDeTest() {
