@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAnimal;
+import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionEmploye;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.IRace;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.Sexe;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal.StatusAnimal;
@@ -159,12 +160,17 @@ public class Refuge {
 	}
 	
 	//Partie employe--------------------------------------------------------------------
-	protected boolean verifierEmploye(Employe employe) {
-		try {
-			return employe != null && verifierEmploye(employe.getKey());
-		} catch (Exception e) {
-			e.printStackTrace();
+	protected boolean verifierEmploye(Employe employe) throws ExceptionEmploye {
+		if(employe == null) {
+			throw new ExceptionEmploye("L'employe est null");
 		}
+		
+		for (Employe resultEmploye : mapEmploye.values()) {
+			if(resultEmploye.getNom().equals(employe.getNom()) && resultEmploye.getPrenom().equals(employe.getPrenom()) && resultEmploye.getEmail().equals(employe.getEmail()) && resultEmploye.getTelephone().equals(employe.getTelephone()) && resultEmploye.getAdresse().equals(employe.getAdresse())) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 	
@@ -172,7 +178,7 @@ public class Refuge {
 		return mapEmploye.containsKey(key);
 	}
 	
-	public boolean ajouterEmploye(Employe employe) {
+	public boolean ajouterEmploye(Employe employe) throws ExceptionEmploye {
 		if(!verifierEmploye(employe)) {
 			try {
 				mapEmploye.put(employe.getKey(), employe);
@@ -184,16 +190,39 @@ public class Refuge {
 		return false;
 	}
 	
-	public boolean supprimerEmploye(Employe employe) throws Exception {
+	public boolean supprimerEmploye(Employe employe) throws ExceptionEmploye {
 		if(verifierEmploye(employe)) {
 			return mapEmploye.remove(employe.getKey(), employe);
 		}
 		return false;
 	}
 	
-	public boolean miseAJourEmploye(Employe employe) throws Exception {
+	public boolean miseAJourEmploye(Employe employe) throws ExceptionEmploye {
 		if(verifierEmploye(employe)) {
 			mapEmploye.replace(employe.getKey(), employe);
+			return true;
+		}
+		return false;
+	}
+	
+	public boolean miseAJourEmploye(Employe employe, String nom, String prenom, String email, String tel, String adresse) throws ExceptionEmploye {
+		if(verifierEmploye(employe)) {
+			if(nom != null) {
+				employe.setNom(nom);
+			}
+			if(prenom != null) {
+				employe.setPrenom(prenom);
+			}
+			if(email != null) {
+				employe.setEmail(email);
+			}
+			if(tel != null) {
+				employe.setEmail(email);
+			}
+			if(adresse != null) {
+				employe.setAdresse(adresse);
+			}
+			
 			return true;
 		}
 		return false;
@@ -209,21 +238,38 @@ public class Refuge {
 		}
 	}
 	
-	public Employe retrouverUnEmploye(String nom, String prenom, String email) {
+	public Employe retrouverUnEmploye(String nom, String prenom, String email, String tel, String adresse) throws ExceptionEmploye {
 
-		return (Employe) retrouverEmploye(nom, prenom, email, false);
+		return MapTool.getMapElement(mapEmploye, Employe.class, false, addElementListEmployer(nom, prenom, email, tel, adresse));
 	}
 	
-	public List<Employe> retrouverEmploye(String nom,String prenom, String email, boolean unique) {
-        List<MapTool.SearchCriteria<Employe>> criteriaList = new ArrayList<>();
+	public List<Employe> retrouverEmploye(String nom,String prenom, String email, String tel, String adresse, boolean unique) throws ExceptionEmploye {
+		return MapTool.getMapElements(mapEmploye, unique, addElementListEmployer(nom, prenom, email, tel, adresse));
+	}
+	
+	private List<MapTool.SearchCriteria<Employe>> addElementListEmployer(String nom, String prenom, String email, String tel, String adresse) throws ExceptionEmploye{
+		List<MapTool.SearchCriteria<Employe>> criteriaList = new ArrayList<>();
 		
-		criteriaList.add(new MapTool.SearchCriteria<>(Employe::getNom, nom));
-		criteriaList.add(new MapTool.SearchCriteria<>(Employe::getPrenom, prenom));
-		criteriaList.add(new MapTool.SearchCriteria<>(Employe::getEmail, email));
+		if(nom == null && prenom==null && email==null && tel==null && adresse==null) {
+			throw new ExceptionEmploye("Aucun attribut de employé n'est inséré !");
+		}
 		
-		List<Employe> result = MapTool.getMapElements(mapEmploye, unique, criteriaList);
-
-		return result;
+		if(nom!=null) {
+			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getNom, nom));
+		}
+		if(prenom != null) {
+			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getPrenom, prenom));
+		}
+		if(email!=null) {
+			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getEmail, email));
+		}
+		if(tel!=null) {
+			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getTelephone, tel));
+		}
+		if(adresse!=null) {
+			criteriaList.add(new MapTool.SearchCriteria<>(Employe::getAdresse, adresse));
+		}
+		return criteriaList;
 	}
 	
 //	public Personne retrouverPersonne(String... criteres) {

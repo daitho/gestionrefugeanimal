@@ -14,6 +14,7 @@ import org.junit.jupiter.api.TestMethodOrder;
 
 import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAdoption;
 import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionAnimal;
+import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionEmploye;
 import com.mia.itmf.projet.gestionrefugeanimal.gestion.GestionAdoption;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Adoptant;
 import com.mia.itmf.projet.gestionrefugeanimal.model.Animal;
@@ -144,13 +145,18 @@ public class TestAdoption {
 	@Test @Order(5)
 	public void test5_ajouterEmploye(){
 		System.out.println("--------------------------------");
-		refuge.ajouterEmploye(new Employe("Paul", "Martin", "pajean@gmail.com", "0455655677", "Bordeaux"));
-		refuge.ajouterEmploye(new Employe("Paul", "Martin", "pajean@gmail.com", "0455655677", "Bordeaux"));
-		refuge.ajouterEmploye(null);
+		try {
+			refuge.ajouterEmploye(new Employe("Paul", "Martin", "pajean@gmail.com", "0455655677", "Bordeaux"));
+			refuge.ajouterEmploye(new Employe("Paul", "Martin", "pajean@gmail.com", "0455655677", "Bordeaux"));
+			refuge.ajouterEmploye(null);
+		} catch (ExceptionEmploye e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		refuge.consulterListeEmployes();
 		assertEquals(refuge.getNombreEmploye(), 2);
 	}
-	
+	                                                                                                                                                                                                                                                                                                                                                                                
 //	@Test @Order(6)
 //	public void test6_listeDemande() throws Exception {
 //		refuge.listeDemande();
@@ -176,6 +182,5 @@ public class TestAdoption {
 		}
 		System.out.println("Animaux supprimés !" );
 	}
-	
 	
 }
