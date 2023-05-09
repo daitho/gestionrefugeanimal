@@ -37,8 +37,9 @@ public class TestAdoption {
 	@BeforeAll
 	public static void init() {
 		
-		//Chien
+		
 		try {
+			//Chien
 			refuge.ajouterAnimal(new Chien("Chouchou", RaceChien.Caniche , 5, Sexe.FEMININ));
 			refuge.ajouterAnimal(new Chien("Pipi", RaceChien.Cocker , 2, Sexe.MAXULIN));
 			refuge.ajouterAnimal(new Chien("Charline", RaceChien.Boledogue , 4, Sexe.FEMININ));
