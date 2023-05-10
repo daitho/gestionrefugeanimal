@@ -1,6 +1,7 @@
 
 package com.mia.itmf.projet.gestionrefugeanimal.model;
 
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionEmploye;
@@ -55,7 +56,8 @@ public abstract class Personne {
 
 
 	protected boolean setEmail(String email) throws ExceptionEmploye {
-		if(email.matches(".+@.+\\.[a-z]+")) {
+		
+		if(isEmailAdress(email)) {
 			this.email = email;
 			return true;
 		}
@@ -63,6 +65,12 @@ public abstract class Personne {
 		throw new ExceptionEmploye("L'email "+email+" est incorrect");
 	}
 
+    public boolean isEmailAdress(String email) {
+        Pattern parttern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,4}$");
+        Matcher matcher = parttern.matcher(email.toUpperCase());
+        
+        return matcher.matches();
+    }
 
 	public String getTelephone() {
 		return telephone;
