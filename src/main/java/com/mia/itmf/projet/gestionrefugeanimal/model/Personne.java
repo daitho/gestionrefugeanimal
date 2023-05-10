@@ -1,6 +1,10 @@
 
 package com.mia.itmf.projet.gestionrefugeanimal.model;
 
+import java.util.regex.Pattern;
+
+import com.mia.itmf.projet.gestionrefugeanimal.exception.ExceptionEmploye;
+
 public abstract class Personne {
 	private String nom;
 	private String prenom;
@@ -50,8 +54,13 @@ public abstract class Personne {
 	}
 
 
-	protected void setEmail(String email) {
-		this.email = email;
+	protected boolean setEmail(String email) throws ExceptionEmploye {
+		if(email.matches(".+@.+\\.[a-z]+")) {
+			this.email = email;
+			return true;
+		}
+		
+		throw new ExceptionEmploye("L'email "+email+" est incorrect");
 	}
 
 
@@ -61,7 +70,19 @@ public abstract class Personne {
 
 
 	protected void setTelephone(String telephone) {
-		this.telephone = telephone;
+		// Expression régulière pour un entier
+		String pattern = "^-?\\d+$";
+
+		// Vérification de la correspondance avec l'expression régulière
+		if (Pattern.matches(pattern, telephone)) {
+			if(telephone.length() == 10 || telephone.length() == 13) {
+				this.telephone = telephone;
+			}else {
+				System.err.println("La numéro de téléphone "+telephone+" n'est pas correct !.");
+			}
+		} else {
+				System.err.println("La numéro de téléphone "+telephone+" n'est pas un entier.");
+		}
 	}
 
 
