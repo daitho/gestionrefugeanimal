@@ -22,13 +22,14 @@ public class TestEmploye {
 		
 		//employe
 		try {
-			gestionEmploye.ajouterEmploye(new Employe("Dupond","Jean","dupj@gmail.com","0602334354","Nantes"));
+			gestionEmploye.ajouterEmploye(new Employe("Dupond","Jean","b@gmail.com","0602334354","Nantes"));
 			gestionEmploye.ajouterEmploye(new Employe("Jean", "Paul", "jpaul@gmail.com", "0603445632", "Limoges"));
 			gestionEmploye.ajouterEmploye(new Employe("Paul", "Le Marchant", "plemarchant@gmail.com", "0643565632", "Bordeaux"));
 			gestionEmploye.ajouterEmploye(new Employe("Ciryl", "Gane", "cgane@gmail.com", "0687455632", "Paris"));
 			gestionEmploye.ajouterEmploye(new Employe("Francis", "Ngannou", "fngannou@gmail.com", "0645655632", "Ile-de-France"));
 			
-
+			String str = "dupondj@gmail.com";
+			System.out.println(str.substring(0,7));
 			
 		} catch (ExceptionEmploye e) {
 			// TODO Auto-generated catch block
