@@ -22,7 +22,7 @@ public class TestEmploye {
 		
 		//employe
 		try {
-			gestionEmploye.ajouterEmploye(new Employe("Dupond","Jean","dupJ@gmail.com","0602334354","Nantes"));
+			gestionEmploye.ajouterEmploye(new Employe("Dupond","Jean","dupj@gmail.com","0602334354","Nantes"));
 			gestionEmploye.ajouterEmploye(new Employe("Jean", "Paul", "jpaul@gmail.com", "0603445632", "Limoges"));
 			gestionEmploye.ajouterEmploye(new Employe("Paul", "Le Marchant", "plemarchant@gmail.com", "0643565632", "Bordeaux"));
 			gestionEmploye.ajouterEmploye(new Employe("Ciryl", "Gane", "cgane@gmail.com", "0687455632", "Paris"));
@@ -95,7 +95,7 @@ public class TestEmploye {
 	}
 	
 	@AfterAll
-	public static void supprimerTousLesAnimauxDeTest() {
+	public static void supprimerLesAnimauxDeTest() {
 		try {
 			gestionEmploye.supprimerEmploye(gestionEmploye.retrouverUnEmploye("Dupond","Jean", null, null, null));
 			gestionEmploye.supprimerEmploye(gestionEmploye.retrouverUnEmploye("Jean", "Paul", null, null, null));

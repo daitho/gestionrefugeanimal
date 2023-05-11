@@ -21,11 +21,15 @@ public abstract class Personne {
 	}
 	
 	public Personne(String nom, String prenom, String email, String telephone, String adresse) {
-		this.nom = nom;
-		this.prenom = prenom;
-		this.email = email;
-		this.telephone = telephone;
-		this.adresse = adresse;
+		setNom(nom);
+		setPrenom(prenom);
+		try {
+			setEmail(email);
+		} catch (ExceptionEmploye e) {
+			e.printStackTrace();
+		}
+		setAdresse(adresse);
+		setTelephone(telephone);
 	}
 	
 	public abstract String getKey();

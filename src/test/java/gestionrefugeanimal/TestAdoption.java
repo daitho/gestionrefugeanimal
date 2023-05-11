@@ -58,7 +58,7 @@ public class TestAdoption {
 		}
 		
 		//Employe
-		listesAdoptant.add(new Adoptant("Dupond","Jean","dupJ@gmail.com","0602334354","Nantes"));
+		listesAdoptant.add(new Adoptant("Dupond","Jean","dupj@gmail.com","0602334354","Nantes"));
 		listesAdoptant.add(new Adoptant("Jean", "Paul", "jpaul@gmail.com", "0603445632", "Limoges"));
 	}
 	

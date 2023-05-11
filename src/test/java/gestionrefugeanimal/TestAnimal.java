@@ -149,7 +149,7 @@ public class TestAnimal {
 	}
 	
 	@AfterAll
-	public static void supprimerTousLesAnimauxDeTest() {
+	public static void supprimerLesAnimauxDeTest() {
 		try {
 			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Chouchou", RaceChien.Caniche, 5, null));
 			gestionAnimal.supprimerAnimal(gestionAnimal.retrouverUnAnimal("Pipi", RaceChien.Cocker, 2, null));
